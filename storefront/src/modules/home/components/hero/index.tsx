@@ -3,33 +3,47 @@ import { Button, Heading } from "@medusajs/ui"
 
 const Hero = () => {
   return (
-    <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
-        <span>
+    <section className="relative w-full bg-ui-bg-subtle min-h-[70vh] flex items-center justify-center border-b border-ui-border-base">
+      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-16 gap-8">
+        <div className="flex-1 flex flex-col items-start justify-center text-left gap-6">
           <Heading
             level="h1"
-            className="text-3xl leading-10 text-ui-fg-base font-normal"
+            className="text-4xl md:text-5xl font-extrabold text-ui-fg-base leading-tight"
           >
-            Well done toto ! You have successfully deployed your Medusa 2.0 store on Railway!
+            Kits & sclérotes de blob
           </Heading>
           <Heading
             level="h2"
-            className="text-3xl leading-10 text-ui-fg-subtle font-normal"
+            className="text-lg md:text-2xl text-ui-fg-subtle font-medium"
           >
-            Need help customizing your store?
+            Des blobo (Physarum polycephalum) pour vos expériences scientifiques&nbsp;!
           </Heading>
-        </span>
-        <a
-          href="https://funkyton.com/medusajs-2-0-is-finally-here/"
-          target="_blank"
-        >
-          <h1 style={{ textDecoration: "underline" }}>
-            Visit the tutorial
-          </h1>
-        </a>
+          <a href="#products" className="mt-4">
+            <Button className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all text-lg border-none">
+              Acheter
+            </Button>
+          </a>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <img
+            src="https://front-neobloby-production.up.railway.app/_next/image?url=%2Fimages%2Fmascotte.png&w=384&q=75"
+            alt="Mascotte Neobloby"
+            className="w-64 h-64 object-contain drop-shadow-xl animate-float"
+            loading="lazy"
+          />
+        </div>
       </div>
-    </div>
-  )
-}
+      <style jsx>{`
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-16px); }
+        }
+      `}</style>
+    </section>
+  );
+};
 
-export default Hero
+export default Hero;

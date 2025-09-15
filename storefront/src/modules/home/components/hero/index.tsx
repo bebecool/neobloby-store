@@ -3,7 +3,6 @@ import { Heading, Button } from "@medusajs/ui";
 import { useTranslation } from "react-i18next"
 import "@lib/i18n"
 
-
 const Hero = () => {
   const { t } = useTranslation();
   return (

@@ -25,12 +25,7 @@ const Hero = () => {
           </a>
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <img
-            src="https://front-neobloby-production.up.railway.app/_next/image?url=%2Fimages%2Fmascotte.png&w=384&q=75"
-            alt="Mascotte Neobloby"
-            className="w-64 h-64 object-contain drop-shadow-xl animate-float"
-            loading="lazy"
-          />
+
         </div>
       </div>
       <style jsx>{`

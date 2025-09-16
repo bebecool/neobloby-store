@@ -2,7 +2,7 @@
 
 import { Heading, Button } from "@medusajs/ui";
 import { useTranslation } from 'react-i18next';
-import '../../../lib/i18n'; // Import de la configuration i18n
+import '@lib/i18n'; // Import de la configuration i18n
 
 const Hero = () => {
   const { t } = useTranslation('common');

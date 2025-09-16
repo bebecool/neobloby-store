@@ -1,13 +1,7 @@
 import { useI18nTranslation } from "@lib/hooks/useI18nTranslation"
 
 const LanguageSwitcher = () => {
-  const { i18n, isClient } = useI18nTranslation()
-
-  const changeLanguage = (lng: string) => {
-    if (isClient && i18n) {
-      i18n.changeLanguage(lng)
-    }
-  }
+  const { i18n, changeLanguage, isClient } = useI18nTranslation()
 
   if (!isClient) {
     return null // Ne rien afficher côté serveur

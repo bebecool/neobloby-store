@@ -17,8 +17,14 @@ const fetchCart = async () => {
   return cart
 }
 
-export default async function CartButton() {
+type CartButtonProps = {
+  buttonClassName?: string
+  badgeClassName?: string
+}
+
+export default async function CartButton(props: CartButtonProps = {}) {
+  const { buttonClassName, badgeClassName } = props
   const cart = await fetchCart()
 
-  return <CartDropdown cart={cart} />
+  return <CartDropdown cart={cart} buttonClassName={buttonClassName} badgeClassName={badgeClassName} />
 }

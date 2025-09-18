@@ -21,6 +21,8 @@ module.exports = {
         padding: "padding-top padding-right padding-bottom padding-left",
       },
       colors: {
+        primary: "#5F23B6", // Violet NeoBloby
+        accent: "#FFD600", // Jaune NeoBloby
         grey: {
           0: "#FFFFFF",
           5: "#F9FAFB",

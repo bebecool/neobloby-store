@@ -2,11 +2,10 @@
 
 import { Heading, Button } from "@medusajs/ui";
 import { useTranslation } from 'react-i18next';
-import '@lib/i18n'; // Import de la configuration i18n
 
 const Hero = () => {
-  const { t } = useTranslation('common');
-
+  const { t } = useTranslation()
+  
   return (
     <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
       <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">

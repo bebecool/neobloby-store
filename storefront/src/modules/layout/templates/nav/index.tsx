@@ -1,4 +1,6 @@
+
 import { Suspense } from "react"
+import Image from "next/image"
 
 import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
@@ -6,66 +8,65 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 import LanguageSwitcher from "@modules/layout/components/language-switcher"
+import CountrySelect from "@modules/layout/components/country-select"
+import NavLinks from "@modules/layout/components/nav-links"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} />
-            </div>
-          </div>
-
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              Neobloby Store
+      <header className="bg-white shadow-lg rounded-b-3xl">
+        <div className="max-w-7xl mx-auto px-4 flex h-16 md:h-20 items-center justify-between">
+          {/* Logo + titre NeoBloby */}
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <LocalizedClientLink href="/" className="flex items-center gap-2 md:gap-3">
+              <Image
+                src="/images/mascotte.png"
+                alt="Mascotte Neobloby"
+                width={70}
+                height={70}
+                className="bg-transparent w-[70px] h-[70px]"
+                style={{ width: '70px', height: '70px' }}
+                unoptimized
+              />
+              <Image
+                src="/images/neobloby-logo-gradient.png"
+                alt="Logo Neobloby"
+                width={200}
+                height={60}
+                className="h-10 md:h-14 w-auto object-contain"
+                unoptimized
+              />
             </LocalizedClientLink>
           </div>
 
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              {process.env.NEXT_PUBLIC_FEATURE_SEARCH_ENABLED && (
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base"
-                  href="/search"
-                  scroll={false}
-                  data-testid="nav-search-link"
-                >
-                  Search
-                </LocalizedClientLink>
-              )}
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
-              </LocalizedClientLink>
-            </div>
+          {/* Navigation desktop avec design NeoBloby */}
+          <nav className="hidden md:flex items-center gap-6 text-base font-medium">
+            <NavLinks />
+            
+            {/* Sélecteur de langue */}
             <LanguageSwitcher />
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
-            >
-              <CartButton />
-            </Suspense>
+            
+            {/* Sélecteur de pays avec logique Medusa */}
+            <CountrySelect regions={regions} />
+            
+            {/* Bouton compte */}
+            <LocalizedClientLink href="/account" className="text-gray-600 hover:text-primary transition-all duration-300 p-2.5 rounded-xl hover:bg-gray-50">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </LocalizedClientLink>
+            
+            {/* Bouton panier Medusa */}
+            <CartButton />
+          </nav>
+
+          {/* Menu burger mobile */}
+          <div className="md:hidden">
+            <SideMenu regions={regions} />
           </div>
-        </nav>
+        </div>
       </header>
     </div>
   )

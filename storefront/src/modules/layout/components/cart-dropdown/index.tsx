@@ -240,8 +240,8 @@ const CartDropdown = ({ cart, onClick, buttonClassName = "relative rounded-xl bg
             }}
             style={{ cursor: 'pointer', pointerEvents: 'auto' }}
           ></div>
-          {/* Panneau du panier positionné à droite, largeur max-w-md */}
-          <div className="absolute inset-y-0 right-0 z-[9999]" style={{ width: '28rem', pointerEvents: 'auto' }}>
+          {/* Panneau du panier - responsive : pleine largeur mobile, largeur fixe desktop */}
+          <div className="absolute inset-y-0 right-0 z-[9999] w-full md:w-[28rem]" style={{ pointerEvents: 'auto' }}>
             <div className="h-full">
               <div className={`h-full overflow-y-auto bg-white shadow-xl transition-transform duration-300 ease-in-out will-change-transform ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`}>
                 <div className="flex h-full flex-col">

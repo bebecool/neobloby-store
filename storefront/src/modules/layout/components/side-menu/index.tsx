@@ -8,37 +8,16 @@ import { useTranslation } from 'react-i18next'
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
-import { retrieveCart } from "@lib/data/cart"
-import { useState, useEffect } from "react"
+import CartDropdown from "@modules/layout/components/cart-dropdown"
 
-const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
+const SideMenu = ({ 
+  regions,
+  cart 
+}: { 
+  regions: HttpTypes.StoreRegion[] | null
+  cart: HttpTypes.StoreCart | null
+}) => {
   const { t } = useTranslation()
-  const [cartCount, setCartCount] = useState(0)
-  
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      try {
-        const cart = await retrieveCart()
-        const totalItems = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0
-        setCartCount(totalItems)
-      } catch (error) {
-        console.error('Error fetching cart:', error)
-      }
-    }
-    
-    fetchCartCount()
-    
-    // Mettre à jour le compteur toutes les 5 secondes ou quand la page regagne le focus
-    const interval = setInterval(fetchCartCount, 5000)
-    const handleFocus = () => fetchCartCount()
-    
-    window.addEventListener('focus', handleFocus)
-    
-    return () => {
-      clearInterval(interval)
-      window.removeEventListener('focus', handleFocus)
-    }
-  }, [])
   
   const SideMenuItems = {
     [t('nav.home') || 'Home']: "/",
@@ -51,33 +30,12 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
   return (
     <div className="h-full">
       <div className="flex items-center h-full gap-4">
-        {/* Icône panier avec badge */}
-        <LocalizedClientLink 
-          href="/cart"
-          className="relative flex items-center transition-all ease-out duration-200 hover:text-ui-fg-base"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-current"
-          >
-            <path
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4.01"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-              {cartCount > 99 ? '99+' : cartCount}
-            </span>
-          )}
-        </LocalizedClientLink>
+        {/* Utilisation du vrai CartDropdown */}
+        <CartDropdown 
+          cart={cart} 
+          buttonClassName="relative rounded-xl bg-primary hover:bg-primary/90 px-3 py-2 text-white font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          badgeClassName="absolute -right-1 -top-1 rounded-full bg-red-500 px-2 py-0.5 text-xs text-white font-bold shadow-sm"
+        />
 
         {/* Menu hamburger */}
         <Popover className="h-full flex">

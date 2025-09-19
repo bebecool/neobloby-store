@@ -5,6 +5,7 @@ import { Button } from "@medusajs/ui"
 import { useParams } from "next/navigation"
 import { addToCart } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
+import { useCart } from "@lib/context/cart-context"
 
 interface AddToCartPreviewButtonProps {
   product: HttpTypes.StoreProduct & {
@@ -16,6 +17,7 @@ export default function AddToCartPreviewButton({ product }: AddToCartPreviewButt
   const [isLoading, setIsLoading] = useState(false)
   const [isAdded, setIsAdded] = useState(false)
   const countryCode = useParams().countryCode as string
+  const { openCart, setCartCount } = useCart()
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -35,6 +37,12 @@ export default function AddToCartPreviewButton({ product }: AddToCartPreviewButt
       })
       
       setIsAdded(true)
+      
+      // Ouvrir le panneau panier sur mobile
+      if (window.innerWidth < 768) {
+        openCart()
+      }
+      
       setTimeout(() => setIsAdded(false), 2000)
     } catch (error) {
       console.error("Error adding to cart:", error)

@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import Image from "next/image"
 
 import { listRegions } from "@lib/data/regions"
+import { retrieveCart } from "@lib/data/cart"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
@@ -13,6 +14,14 @@ import NavLinks from "@modules/layout/components/nav-links"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
+  
+  // Récupérer le panier pour le passer au SideMenu
+  let cart = null
+  try {
+    cart = await retrieveCart()
+  } catch (error) {
+    // Si erreur, cart reste null
+  }
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
@@ -64,7 +73,7 @@ export default async function Nav() {
 
           {/* Menu burger mobile */}
           <div className="md:hidden">
-            <SideMenu regions={regions} />
+            <SideMenu regions={regions} cart={cart} />
           </div>
         </div>
       </header>

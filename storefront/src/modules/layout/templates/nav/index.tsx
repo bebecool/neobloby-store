@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import Image from "next/image"
 
 import { listRegions } from "@lib/data/regions"
-import { retrieveCart } from "@lib/data/cart"
+import { enrichLineItems, retrieveCart } from "@lib/data/cart"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
@@ -15,10 +15,14 @@ import NavLinks from "@modules/layout/components/nav-links"
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
   
-  // Récupérer le panier pour le passer au SideMenu
+  // Récupérer et enrichir le panier pour le passer au SideMenu
   let cart = null
   try {
     cart = await retrieveCart()
+    if (cart?.items?.length) {
+      const enrichedItems = await enrichLineItems(cart.items, cart.region_id!)
+      cart.items = enrichedItems
+    }
   } catch (error) {
     // Si erreur, cart reste null
   }

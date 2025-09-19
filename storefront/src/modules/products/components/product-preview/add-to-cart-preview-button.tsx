@@ -8,7 +8,7 @@ import { HttpTypes } from "@medusajs/types"
 
 interface AddToCartPreviewButtonProps {
   product: HttpTypes.StoreProduct & {
-    variants?: HttpTypes.StoreProductVariant[]
+    variants?: HttpTypes.StoreProductVariant[] | null
   }
 }
 

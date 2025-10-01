@@ -42,7 +42,7 @@ const nextConfig = {
       },
       { // Note: Railway bucket storage for media
         protocol: "https",
-        hostname: "bucket-production-d738.up.railway.app",
+        hostname: "cdn.neobloby.com",
       },
       ...(process.env.NEXT_PUBLIC_MINIO_ENDPOINT ? [{ // Note: needed when using MinIO bucket storage for media
         protocol: "https",

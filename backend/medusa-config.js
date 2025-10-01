@@ -62,7 +62,8 @@ const medusaConfig = {
               endPoint: MINIO_ENDPOINT,
               accessKey: MINIO_ACCESS_KEY,
               secretKey: MINIO_SECRET_KEY,
-              bucket: MINIO_BUCKET // Optional, default: medusa-media
+              bucket: MINIO_BUCKET, // Optional, default: medusa-media,
+              publicUrl: process.env.MINIO_PUBLIC_URL // ✅ rajoute ça
             }
           }] : [{
             resolve: '@medusajs/file-local',

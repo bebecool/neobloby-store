@@ -80,49 +80,51 @@ const SideMenu = ({
                 <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-gradient-to-br from-primary/95 to-purple-600/95 rounded-3xl justify-between p-6 shadow-2xl"
+                    className="flex flex-col h-full bg-gradient-to-br from-primary/95 via-purple-600/95 to-primary/95 rounded-3xl justify-between shadow-2xl overflow-hidden"
                   >
                     {/* Header avec bouton fermer */}
-                    <div className="flex justify-between items-center mb-8">
+                    <div className="flex justify-between items-center p-6 pb-4 border-b border-white/10">
                       <div className="text-white">
-                        <h2 className="text-2xl font-bold">Menu</h2>
+                        <h2 className="text-3xl font-bold tracking-tight">Menu</h2>
                       </div>
                       <button 
                         data-testid="close-menu-button" 
                         onClick={close}
-                        className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
+                        className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                       >
-                        <XMark className="text-white" />
+                        <XMark className="text-white w-6 h-6" />
                       </button>
                     </div>
 
                     {/* Navigation principale */}
-                    <ul className="flex flex-col gap-4 items-start justify-start flex-1">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name} className="w-full">
-                            <LocalizedClientLink
-                              href={href}
-                              className="text-2xl font-semibold leading-relaxed text-white hover:text-accent transition-all duration-300 flex items-center gap-3 p-3 rounded-xl hover:bg-white/10"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              <span className="text-accent">▶</span>
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
-                    </ul>
+                    <div className="flex-1 overflow-y-auto px-6 py-4">
+                      <ul className="flex flex-col gap-2">
+                        {Object.entries(SideMenuItems).map(([name, href]) => {
+                          return (
+                            <li key={name}>
+                              <LocalizedClientLink
+                                href={href}
+                                className="group flex items-center gap-4 text-white text-xl font-semibold p-4 rounded-2xl hover:bg-white/10 transition-all duration-300 active:scale-95"
+                                onClick={close}
+                                data-testid={`${name.toLowerCase()}-link`}
+                              >
+                                <span className="text-accent text-2xl transition-transform group-hover:translate-x-1">▶</span>
+                                <span className="transition-all group-hover:translate-x-0.5">{name}</span>
+                              </LocalizedClientLink>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
 
-                    {/* Paramètres - Langue et Pays */}
-                    <div className="flex flex-col gap-4 border-t border-white/20 pt-6 mb-6">
-                      <div className="text-white font-semibold mb-2 text-sm uppercase tracking-wide">
-                        {t('settings.preferences')}
+                    {/* Section Paramètres */}
+                    <div className="px-6 py-4 border-t border-white/10 bg-black/10 backdrop-blur-sm">
+                      <div className="text-white/80 font-bold mb-4 text-xs uppercase tracking-wider">
+                        Paramètres
                       </div>
                       
-                      {/* Sélecteur de langue */}
-                      <div className="w-full">
+                      {/* Sélecteur de langue - Style iOS */}
+                      <div className="mb-3">
                         <LanguageSwitcher />
                       </div>
 
@@ -133,9 +135,9 @@ const SideMenu = ({
                     </div>
 
                     {/* Footer */}
-                    <div className="flex flex-col gap-y-4">
-                      <Text className="text-white/70 text-xs text-center">
-                        © {new Date().getFullYear()} Neobloby Store. All rights reserved.
+                    <div className="px-6 py-4 bg-black/20">
+                      <Text className="text-white/60 text-xs text-center leading-relaxed">
+                        © {new Date().getFullYear()} Neobloby Store<br/>All rights reserved.
                       </Text>
                     </div>
                   </div>

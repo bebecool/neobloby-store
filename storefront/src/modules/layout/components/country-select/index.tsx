@@ -66,14 +66,14 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative z-[200]">
       <Listbox
         as="span"
         onChange={handleChange}
         value={current}
       >
-        <Listbox.Button className="flex items-center gap-2 rounded-xl bg-white hover:bg-gray-50 px-4 py-2.5 text-primary font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow-md border border-gray-200 hover:border-primary/20">
-          <span className="font-medium flex items-center gap-2">
+        <Listbox.Button className="w-full flex items-center justify-between gap-2 rounded-xl bg-white hover:bg-gray-50 px-4 py-3 text-primary font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow-md border border-gray-200 hover:border-primary/20">
+          <span className="font-medium flex items-center gap-2 flex-1 text-left">
             <span className="flex items-center gap-2">
               {t('shipping.to')}
               {current && (
@@ -89,17 +89,19 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
               )}
             </span>
           </span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </Listbox.Button>
-        <div className="flex relative w-full min-w-[320px]">
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Listbox.Options
+            className="absolute top-full mt-2 left-0 right-0 max-h-[250px] overflow-y-auto z-[10000] bg-white drop-shadow-2xl shadow-2xl text-sm text-black rounded-xl w-full border-2 border-primary/20"
           >
-            <Listbox.Options
-              className="absolute top-full mt-2 left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
-            >
               {options?.map((o, index) => {
                 return (
                   <Listbox.Option
@@ -121,10 +123,8 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
               })}
             </Listbox.Options>
           </Transition>
-        </div>
       </Listbox>
     </div>
   )
 }
-
 export default CountrySelect

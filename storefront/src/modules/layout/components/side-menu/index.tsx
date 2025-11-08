@@ -142,7 +142,7 @@ const SideMenu = ({
                       </div>
                       
                       {/* Sélecteur de langue - Style iOS */}
-                      <div className="mb-3">
+                      <div className="mb-4">
                         <label className="text-white text-sm font-medium mb-2 block">
                           Langue
                         </label>
@@ -150,7 +150,10 @@ const SideMenu = ({
                       </div>
 
                       {/* Sélecteur de pays */}
-                      <div className="w-full">
+                      <div className="w-full mb-4">
+                        <label className="text-white text-sm font-medium mb-2 block">
+                          Pays de livraison
+                        </label>
                         <CountrySelect regions={regions || []} />
                       </div>
                     </div>

@@ -53,6 +53,18 @@ const medusaConfig = {
   admin: {
     backendUrl: BACKEND_URL,
     disable: SHOULD_DISABLE_ADMIN,
+    vite: () => ({
+      build: {
+        rollupOptions: {
+          external: (id) => {
+            // Externaliser tous les modules @medusajs qui se terminent par /admin ou certains modules spécifiques
+            return /^@medusajs\/(.*\/)?admin$/.test(id) || 
+                   id === '@medusajs/dashboard' ||
+                   id.startsWith('@medusajs/draft-order')
+          }
+        }
+      }
+    })
   },
   modules: [
     {

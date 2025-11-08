@@ -100,27 +100,27 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          {/* Desktop: options compactes, Mobile: options plus grandes */}
+          {/* Desktop: options compactes, Mobile: options plus grandes et z-index très élevé */}
           <Listbox.Options
-            className="absolute top-full mt-2 left-0 right-0 max-h-[280px] md:max-h-[320px] overflow-y-auto z-[10000] bg-white drop-shadow-2xl shadow-2xl text-sm md:text-base rounded-xl w-full border-2 border-primary/20"
+            className="absolute top-full mt-2 left-0 right-0 max-h-[280px] md:max-h-[320px] overflow-y-auto z-[99999] bg-white drop-shadow-2xl shadow-2xl text-base md:text-base rounded-xl w-full border-2 border-primary/20"
           >
               {options?.map((o, index) => {
                 return (
                   <Listbox.Option
                     key={index}
                     value={o}
-                    className="py-3 md:py-3.5 px-3 md:px-4 hover:bg-primary/10 active:bg-primary/20 cursor-pointer flex items-center gap-x-2.5 md:gap-x-3 transition-colors duration-150 border-b border-gray-100 last:border-0 min-h-[52px] md:min-h-[56px]"
+                    className="py-4 md:py-3.5 px-4 md:px-4 hover:bg-primary/10 active:bg-primary/20 cursor-pointer flex items-center gap-x-3 md:gap-x-3 transition-colors duration-150 border-b border-gray-100 last:border-0 min-h-[64px] md:min-h-[56px] touch-manipulation"
                   >
                     <ReactCountryFlag
                       svg
                       style={{
-                        width: "22px",
-                        height: "16px",
+                        width: "28px",
+                        height: "21px",
                       }}
                       className="rounded-sm shadow-sm flex-shrink-0 md:w-[24px] md:h-[18px]"
                       countryCode={o?.country ?? ""}
                     />
-                    <span className="font-medium text-gray-800">{o?.label}</span>
+                    <span className="font-semibold text-gray-800 text-base md:font-medium">{o?.label}</span>
                   </Listbox.Option>
                 )
               })}

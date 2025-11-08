@@ -41,11 +41,7 @@ const medusaConfig = {
     },
     build: {
       rollupOptions: {
-        external: [
-          "@medusajs/dashboard", 
-          "@medusajs/draft-order",
-          "@medusajs/draft-order/admin"
-        ]
+          external: (id) => /^@medusajs\/.*\/admin$/.test(id)
       }
     }
   },

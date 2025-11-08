@@ -9,8 +9,11 @@ const LanguageSwitcher = () => {
   const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState('fr')
   const [mounted, setMounted] = useState(false)
-  const { countryCode } = useParams()
-  const currentPath = usePathname().split(`/${countryCode}`)[1]
+  const params = useParams()
+  const pathname = usePathname()
+  
+  const countryCode = params?.countryCode as string | undefined
+  const currentPath = countryCode ? pathname?.split(`/${countryCode}`)[1] : pathname
 
   useEffect(() => {
     setMounted(true)

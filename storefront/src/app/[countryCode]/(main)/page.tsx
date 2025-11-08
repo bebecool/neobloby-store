@@ -146,11 +146,11 @@ export default async function Home({
           {/* Section stats premium */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 rounded-2xl bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-3xl font-bold text-primary mb-1">50K+</div>
+              <div className="text-3xl font-bold text-primary mb-1">1426</div>
               <div className="text-gray-600 font-medium text-sm">Clients satisfaits</div>
             </div>
             <div className="text-center p-4 rounded-2xl bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-3xl font-bold text-purple-600 mb-1">190+</div>
+              <div className="text-3xl font-bold text-purple-600 mb-1">6+</div>
               <div className="text-gray-600 font-medium text-sm">Pays desservis</div>
             </div>
             <div className="text-center p-4 rounded-2xl bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">

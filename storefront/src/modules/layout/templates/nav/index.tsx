@@ -30,32 +30,32 @@ export default async function Nav() {
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       <header className="bg-white shadow-lg rounded-b-3xl">
-        <div className="max-w-7xl mx-auto px-4 flex h-16 md:h-20 items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 flex h-16 md:h-20 items-center justify-between gap-4">
           {/* Logo + titre NeoBloby */}
-          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
             <LocalizedClientLink href="/" className="flex items-center gap-2 md:gap-3">
               <Image
                 src="/images/mascotte.png"
                 alt="Mascotte Neobloby"
-                width={70}
-                height={70}
-                className="bg-transparent w-[70px] h-[70px]"
-                style={{ width: '70px', height: '70px' }}
+                width={60}
+                height={60}
+                className="bg-transparent w-[60px] h-[60px]"
+                style={{ width: '60px', height: '60px' }}
                 unoptimized
               />
               <Image
                 src="/images/neobloby-logo-gradient.png"
                 alt="Logo Neobloby"
-                width={200}
-                height={60}
-                className="h-10 md:h-14 w-auto object-contain"
+                width={180}
+                height={50}
+                className="h-9 md:h-12 w-auto object-contain"
                 unoptimized
               />
             </LocalizedClientLink>
           </div>
 
           {/* Navigation desktop avec design NeoBloby */}
-          <nav className="hidden md:flex items-center gap-4 text-base font-medium">
+          <nav className="hidden md:flex items-center gap-3 text-base font-medium flex-1 justify-end">
             <NavLinks />
             
             {/* Sélecteur de langue */}
@@ -75,8 +75,20 @@ export default async function Nav() {
             <CartButton />
           </nav>
 
-          {/* Menu burger mobile */}
-          <div className="md:hidden">
+          {/* Actions mobiles : loupe + panier + menu burger */}
+          <div className="md:hidden flex items-center gap-3">
+            {/* Bouton recherche (loupe) sur mobile */}
+            <LocalizedClientLink 
+              href="/search" 
+              className="text-gray-600 hover:text-primary transition-all duration-300 p-2 rounded-xl hover:bg-gray-50"
+              aria-label="Rechercher"
+            >
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </LocalizedClientLink>
+            
+            {/* Menu burger avec panier */}
             <SideMenu regions={regions} cart={cart} />
           </div>
         </div>

@@ -7,34 +7,29 @@ export default function NavLinks() {
   const { t } = useTranslation()
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       <LocalizedClientLink 
         href="/store" 
-        className="relative px-3 py-2 text-gray-800 hover:text-primary font-bold transition-all duration-300 rounded-lg hover:bg-primary/10 group"
+        className="px-4 py-2.5 text-gray-700 hover:text-primary font-semibold transition-all duration-200 rounded-xl hover:bg-primary/5 active:scale-95"
       >
-        <span className="relative z-10">{t('nav.shop')}</span>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        {t('nav.shop')}
       </LocalizedClientLink>
       
       <LocalizedClientLink 
         href="/search" 
-        className="relative px-3 py-2 text-gray-800 hover:text-primary font-bold transition-all duration-300 rounded-lg hover:bg-primary/10 group"
+        className="px-4 py-2.5 text-gray-700 hover:text-primary font-semibold transition-all duration-200 rounded-xl hover:bg-primary/5 flex items-center gap-2 active:scale-95"
       >
-        <span className="relative z-10 flex items-center gap-2">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          {t('nav.search')}
-        </span>
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-primary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        {t('nav.search')}
       </LocalizedClientLink>
       
       <LocalizedClientLink 
         href="/about" 
-        className="relative px-3 py-2 text-gray-800 hover:text-primary font-bold transition-all duration-300 rounded-lg hover:bg-primary/10 group"
+        className="px-4 py-2.5 text-gray-700 hover:text-primary font-semibold transition-all duration-200 rounded-xl hover:bg-primary/5 active:scale-95 whitespace-nowrap"
       >
-        <span className="relative z-10">{t('nav.about')}</span>
-        <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-primary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        {t('nav.about')}
       </LocalizedClientLink>
     </div>
   )

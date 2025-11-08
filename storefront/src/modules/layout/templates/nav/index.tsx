@@ -30,17 +30,17 @@ export default async function Nav() {
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       <header className="bg-white shadow-lg rounded-b-3xl">
-        <div className="max-w-7xl mx-auto px-4 flex h-16 md:h-20 items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 flex h-16 md:h-20 items-center gap-3 md:gap-4">
           {/* Logo + titre NeoBloby */}
-          <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
-            <LocalizedClientLink href="/" className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 flex-1 md:flex-initial min-w-0">
+            <LocalizedClientLink href="/" className="flex items-center gap-1.5 md:gap-3 min-w-0">
               <Image
                 src="/images/mascotte.png"
                 alt="Mascotte Neobloby"
                 width={60}
                 height={60}
-                className="bg-transparent w-[60px] h-[60px]"
-                style={{ width: '60px', height: '60px' }}
+                className="bg-transparent w-[50px] h-[50px] md:w-[60px] md:h-[60px] flex-shrink-0"
+                style={{ width: '50px', height: '50px' }}
                 unoptimized
               />
               <Image
@@ -48,7 +48,7 @@ export default async function Nav() {
                 alt="Logo Neobloby"
                 width={180}
                 height={50}
-                className="h-9 md:h-12 w-auto object-contain"
+                className="h-7 md:h-12 w-auto object-contain flex-shrink-1 min-w-0"
                 unoptimized
               />
             </LocalizedClientLink>
@@ -76,7 +76,7 @@ export default async function Nav() {
           </nav>
 
           {/* Actions mobiles : loupe + panier + menu burger */}
-          <div className="md:hidden flex items-center gap-3">
+          <div className="md:hidden flex items-center gap-2 flex-shrink-0">
             {/* Bouton recherche (loupe) sur mobile */}
             <LocalizedClientLink 
               href="/search" 

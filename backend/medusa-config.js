@@ -41,7 +41,12 @@ const medusaConfig = {
     },
     build: {
       rollupOptions: {
-          external: (id) => /^@medusajs\/.*\/admin$/.test(id)
+        external: (id) => {
+          // Externaliser tous les modules @medusajs qui se terminent par /admin ou certains modules spécifiques
+          return /^@medusajs\/(.*\/)?admin$/.test(id) || 
+                 id === '@medusajs/dashboard' ||
+                 id.startsWith('@medusajs/draft-order')
+        }
       }
     }
   },

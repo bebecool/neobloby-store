@@ -33,7 +33,7 @@ const SideMenu = ({
         {/* Utilisation du vrai CartDropdown */}
         <CartDropdown 
           cart={cart} 
-          buttonClassName="relative rounded-xl bg-primary hover:bg-primary/90 px-3 py-2 text-white font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          buttonClassName="relative rounded-xl bg-primary hover:bg-primary/90 px-2.5 md:px-3 py-2 text-white font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
           badgeClassName="absolute -right-1 -top-1 rounded-full bg-red-500 px-2 py-0.5 text-xs text-white font-bold shadow-sm"
         />
 

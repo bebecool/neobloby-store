@@ -73,7 +73,7 @@ export default function NeoBlobyHeader({ regions }: NeoBlobyHeaderProps) {
             
             {/* Bouton panier Medusa avec design moderne */}
             <CartButton 
-              buttonClassName="relative rounded-xl bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 px-4 py-2 text-white font-medium text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2"
+              buttonClassName="relative rounded-xl bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 px-2.5 md:px-4 py-2 text-white font-medium text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2"
               badgeClassName="absolute -right-1 -top-1 rounded-full bg-accent px-1.5 py-0.5 text-xs text-black font-bold shadow-md min-w-[20px] text-center"
             />
           </div>

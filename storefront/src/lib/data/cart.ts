@@ -375,10 +375,11 @@ export async function placeOrder() {
 
 /**
  * Updates the countrycode param and revalidates the regions cache
- * @param regionId
- * @param countryCode
+ * @param countryCode - The new country code
+ * @param currentPath - The current path after locale/countryCode
+ * @param locale - The current locale (fr/en)
  */
-export async function updateRegion(countryCode: string, currentPath: string) {
+export async function updateRegion(countryCode: string, currentPath: string, locale?: string) {
   const cartId = getCartId()
   const region = await getRegion(countryCode)
 
@@ -394,5 +395,7 @@ export async function updateRegion(countryCode: string, currentPath: string) {
   revalidateTag("regions")
   revalidateTag("products")
 
-  redirect(`/${countryCode}${currentPath}`)
+  // Inclure le locale dans l'URL : /{locale}/{countryCode}/...
+  const localePrefix = locale || 'fr'
+  redirect(`/${localePrefix}/${countryCode}${currentPath}`)
 }

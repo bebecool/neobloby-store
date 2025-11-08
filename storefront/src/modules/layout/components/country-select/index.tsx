@@ -26,8 +26,15 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
     | undefined
   >(undefined)
 
-  const { countryCode } = useParams()
-  const currentPath = usePathname().split(`/${countryCode}`)[1]
+  const params = useParams()
+  const pathname = usePathname()
+  
+  const locale = params?.locale as string | undefined
+  const countryCode = params?.countryCode as string | undefined
+  
+  // Extraire le chemin après /{locale}/{countryCode}/
+  const pathSegments = pathname?.split("/").filter(Boolean) || []
+  const currentPath = pathSegments.length > 2 ? `/${pathSegments.slice(2).join("/")}` : ""
 
   const options = useMemo(() => {
     const allOptions = regions
@@ -62,7 +69,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }, [options, countryCode])
 
   const handleChange = (option: CountryOption) => {
-    updateRegion(option.country, currentPath)
+    updateRegion(option.country, currentPath, locale)
   }
 
   return (

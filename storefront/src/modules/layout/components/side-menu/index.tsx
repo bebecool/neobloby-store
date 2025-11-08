@@ -32,14 +32,14 @@ const SideMenu = ({
     setTimeout(() => setMenuVisible(false), 300) // Attend la fin de la transition avant de démonter
   }
   
-  // Recalculer les labels quand la langue change
+  // Recalculer les labels quand la langue change (dépend de i18n.language, pas de t)
   const SideMenuItems = useMemo(() => ({
     [t('nav.home')]: "/",
     [t('nav.shop')]: "/store",
     [t('nav.search')]: "/search",
     [t('nav.account')]: "/account",
     [t('nav.cart')]: "/cart",
-  }), [t])
+  }), [t, i18n.language]) // IMPORTANT : ajouter i18n.language comme dépendance
 
   return (
     <div className="h-full">

@@ -2,7 +2,6 @@
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
 
 // Traductions intégrées pour éviter les appels réseau
 const resources = {
@@ -48,6 +47,27 @@ const resources = {
       'product.selectVariant': 'Sélectionner variante',
       'product.viewDetails': 'Voir les détails',
       'product.outOfStock': 'Rupture de stock',
+      'home.featuredProducts': 'Nos Produits Phares',
+      'home.featuredProductsDesc': 'Découvrez notre sélection exclusive de produits NeoBloby',
+      'home.whyUs': 'Pourquoi nous choisir',
+      'home.excellence': 'L\'Excellence NeoBloby',
+      'home.excellenceDesc': 'Nos avantages exclusifs pour une expérience d\'achat exceptionnelle',
+      'home.expressWorldwideDelivery': 'Livraison Mondiale Express',
+      'home.fastSecureDelivery': 'Livraison rapide et sécurisée dans plus de 190 pays avec suivi en temps réel',
+      'home.internationalShipping': 'Livraison internationale',
+      'home.securePayment': 'Paiement Sécurisé 100%',
+      'home.secureTrustedTransactions': 'Transactions protégées avec cryptage SSL et solutions de paiement de confiance',
+      'home.qualityGuarantee': 'Garantie Qualité',
+      'home.qualityGuaranteeAndSupport': 'Garantie Qualité & SAV',
+      'home.customerSatisfaction': 'Satisfaction client garantie avec un service après-vente réactif et attentif',
+      'home.learnMore': 'En savoir plus',
+      'home.satisfiedCustomers': 'Clients satisfaits',
+      'home.countriesServed': 'Pays desservis',
+      'home.satisfactionRate': 'Taux de satisfaction',
+      'home.customerSupport': 'Support client',
+      'home.readyToDiscover': 'Prêt à découvrir NeoBloby ?',
+      'home.joinThousands': 'Rejoignez des milliers de clients satisfaits',
+      'home.discoverProducts': 'Découvrir nos produits',
       'assistant.title': 'Assistant IA',
       'assistant.close': 'Fermer',
       'assistant.placeholder': 'Ta question...',
@@ -113,6 +133,27 @@ const resources = {
       'product.selectVariant': 'Select variant',
       'product.viewDetails': 'View details',
       'product.outOfStock': 'Out of stock',
+      'home.featuredProducts': 'Our Featured Products',
+      'home.featuredProductsDesc': 'Discover our exclusive selection of NeoBloby products',
+      'home.whyUs': 'Why choose us',
+      'home.excellence': 'NeoBloby Excellence',
+      'home.excellenceDesc': 'Our exclusive advantages for an exceptional shopping experience',
+      'home.expressWorldwideDelivery': 'Express Worldwide Delivery',
+      'home.fastSecureDelivery': 'Fast and secure delivery to over 190 countries with real-time tracking',
+      'home.internationalShipping': 'International shipping',
+      'home.securePayment': '100% Secure Payment',
+      'home.secureTrustedTransactions': 'Protected transactions with SSL encryption and trusted payment solutions',
+      'home.qualityGuarantee': 'Quality Guarantee',
+      'home.qualityGuaranteeAndSupport': 'Quality Guarantee & Support',
+      'home.customerSatisfaction': 'Guaranteed customer satisfaction with responsive and attentive after-sales service',
+      'home.learnMore': 'Learn more',
+      'home.satisfiedCustomers': 'Satisfied customers',
+      'home.countriesServed': 'Countries served',
+      'home.satisfactionRate': 'Satisfaction rate',
+      'home.customerSupport': 'Customer support',
+      'home.readyToDiscover': 'Ready to discover NeoBloby?',
+      'home.joinThousands': 'Join thousands of satisfied customers',
+      'home.discoverProducts': 'Discover our products',
       'assistant.title': 'AI Assistant',
       'assistant.close': 'Close',
       'assistant.placeholder': 'Your question...',
@@ -144,12 +185,11 @@ const resources = {
 
 // Configuration i18n côté client uniquement
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: 'fr',
-    lng: 'fr', // Forcer la langue par défaut
+    lng: 'fr',
     defaultNS: 'common',
     debug: false,
     
@@ -157,9 +197,10 @@ i18n
       escapeValue: false, // React échappe déjà les valeurs
     },
     
+    // Désactiver la détection automatique - on gère manuellement via l'URL
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
+      order: [], // Pas de détection auto
+      caches: [], // Pas de cache auto
     },
     
     react: {

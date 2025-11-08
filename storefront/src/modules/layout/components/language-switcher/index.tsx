@@ -49,16 +49,10 @@ const LanguageSwitcher = () => {
     if (lang === currentLang) return
     
     try {
-      // Sauvegarder la langue dans localStorage et cookie
+      // Sauvegarder la langue dans localStorage et cookie pour persistance
       if (typeof window !== 'undefined') {
         localStorage.setItem('i18nextLng', lang)
         document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000`
-      }
-      
-      // Changer la langue dans i18n
-      if (i18n && typeof i18n.changeLanguage === 'function') {
-        await i18n.changeLanguage(lang)
-        setCurrentLang(lang)
       }
       
       // Construire la nouvelle URL : /{nouvelle-langue}/{countryCode}/...
@@ -67,7 +61,10 @@ const LanguageSwitcher = () => {
       const pathAfterLocaleAndCountry = pathSegments.slice(2).join("/")
       const newPath = `/${lang}/${countryCode}${pathAfterLocaleAndCountry ? `/${pathAfterLocaleAndCountry}` : ''}`
       
-      // Naviguer vers la nouvelle URL
+      console.log('🔄 Changing language to:', lang)
+      console.log('📍 Navigating to:', newPath)
+      
+      // Naviguer vers la nouvelle URL - la langue sera détectée au chargement
       window.location.href = newPath
     } catch (error) {
       console.warn('Erreur changement langue:', error)

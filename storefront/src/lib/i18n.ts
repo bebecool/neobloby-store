@@ -71,7 +71,8 @@ const resources = {
       'summary.shipping': 'Livraison',
       'summary.taxes': 'Taxes',
       'summary.total': 'Total',
-      'summary.checkout': 'Procéder au paiement'
+      'summary.checkout': 'Procéder au paiement',
+      'settings.preferences': 'Paramètres'
     }
   },
   en: {
@@ -135,7 +136,8 @@ const resources = {
       'summary.shipping': 'Shipping',
       'summary.taxes': 'Taxes',
       'summary.total': 'Total',
-      'summary.checkout': 'Go to checkout'
+      'summary.checkout': 'Go to checkout',
+      'settings.preferences': 'Settings'
     }
   }
 }

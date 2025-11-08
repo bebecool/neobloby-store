@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 import CartDropdown from "@modules/layout/components/cart-dropdown"
+import LanguageSwitcher from "@modules/layout/components/language-switcher"
+import CountrySelect from "@modules/layout/components/country-select"
 
 const SideMenu = ({ 
   regions,
@@ -78,33 +80,62 @@ const SideMenu = ({
                 <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full bg-gradient-to-br from-primary/95 to-purple-600/95 rounded-3xl justify-between p-6 shadow-2xl"
                   >
-                    <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
-                        <XMark />
+                    {/* Header avec bouton fermer */}
+                    <div className="flex justify-between items-center mb-8">
+                      <div className="text-white">
+                        <h2 className="text-2xl font-bold">Menu</h2>
+                      </div>
+                      <button 
+                        data-testid="close-menu-button" 
+                        onClick={close}
+                        className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
+                      >
+                        <XMark className="text-white" />
                       </button>
                     </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
+
+                    {/* Navigation principale */}
+                    <ul className="flex flex-col gap-4 items-start justify-start flex-1">
                       {Object.entries(SideMenuItems).map(([name, href]) => {
                         return (
-                          <li key={name}>
+                          <li key={name} className="w-full">
                             <LocalizedClientLink
                               href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
+                              className="text-2xl font-semibold leading-relaxed text-white hover:text-accent transition-all duration-300 flex items-center gap-3 p-3 rounded-xl hover:bg-white/10"
                               onClick={close}
                               data-testid={`${name.toLowerCase()}-link`}
                             >
+                              <span className="text-accent">▶</span>
                               {name}
                             </LocalizedClientLink>
                           </li>
                         )
                       })}
                     </ul>
-                    <div className="flex flex-col gap-y-6">
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Neobloby Store. All rights
-                        reserved.
+
+                    {/* Paramètres - Langue et Pays */}
+                    <div className="flex flex-col gap-4 border-t border-white/20 pt-6 mb-6">
+                      <div className="text-white font-semibold mb-2 text-sm uppercase tracking-wide">
+                        {t('settings.preferences')}
+                      </div>
+                      
+                      {/* Sélecteur de langue */}
+                      <div className="w-full">
+                        <LanguageSwitcher />
+                      </div>
+
+                      {/* Sélecteur de pays */}
+                      <div className="w-full">
+                        <CountrySelect regions={regions || []} />
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex flex-col gap-y-4">
+                      <Text className="text-white/70 text-xs text-center">
+                        © {new Date().getFullYear()} Neobloby Store. All rights reserved.
                       </Text>
                     </div>
                   </div>

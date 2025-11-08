@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { updateRegion } from "@lib/data/cart"
 
 const LanguageSwitcher = () => {
@@ -11,6 +11,7 @@ const LanguageSwitcher = () => {
   const [mounted, setMounted] = useState(false)
   const params = useParams()
   const pathname = usePathname()
+  const router = useRouter()
   
   const countryCode = params?.countryCode as string | undefined
   const currentPath = countryCode ? pathname?.split(`/${countryCode}`)[1] : pathname
@@ -54,6 +55,9 @@ const LanguageSwitcher = () => {
       
       // Changer le countryCode dans l'URL pour correspondre à la langue
       await updateRegion(lang, currentPath || '/')
+      
+      // Recharger la page pour que tous les composants se mettent à jour
+      window.location.reload()
     } catch (error) {
       console.warn('Erreur changement langue:', error)
     }

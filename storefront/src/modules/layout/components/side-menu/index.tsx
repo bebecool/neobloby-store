@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { XMark } from "@medusajs/icons"
 import { Text } from "@medusajs/ui"
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,7 @@ const SideMenu = ({
   regions: HttpTypes.StoreRegion[] | null
   cart: HttpTypes.StoreCart | null
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuVisible, setMenuVisible] = useState(false)
 
@@ -32,13 +32,14 @@ const SideMenu = ({
     setTimeout(() => setMenuVisible(false), 300) // Attend la fin de la transition avant de démonter
   }
   
-  const SideMenuItems = {
-    [t('nav.home') || 'Home']: "/",
-    [t('nav.shop') || 'Store']: "/store",
-    [t('nav.search') || 'Search']: "/search",
-    [t('nav.account') || 'Account']: "/account",
-    [t('nav.cart') || 'Cart']: "/cart",
-  }
+  // Recalculer les labels quand la langue change
+  const SideMenuItems = useMemo(() => ({
+    [t('nav.home')]: "/",
+    [t('nav.shop')]: "/store",
+    [t('nav.search')]: "/search",
+    [t('nav.account')]: "/account",
+    [t('nav.cart')]: "/cart",
+  }), [t])
 
   return (
     <div className="h-full">

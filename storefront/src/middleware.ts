@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
+const DEFAULT_LOCALE = "fr" // Langue par défaut
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
@@ -62,7 +63,9 @@ async function getCountryCode(
       .get("x-vercel-ip-country")
       ?.toLowerCase()
 
-    const urlCountryCode = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
+    // Avec la structure /{locale}/{countryCode}/, le countryCode est au 2ème segment (index 2)
+    const pathSegments = request.nextUrl.pathname.split("/").filter(Boolean)
+    const urlCountryCode = pathSegments[1]?.toLowerCase() // Index 1 = 2ème segment
 
     if (urlCountryCode && regionMap.has(urlCountryCode)) {
       countryCode = urlCountryCode
@@ -96,14 +99,21 @@ export async function middleware(request: NextRequest) {
   const cartIdCookie = request.cookies.get("_medusa_cart_id")
 
   const regionMap = await getRegionMap()
-
   const countryCode = regionMap && (await getCountryCode(request, regionMap))
 
-  const urlHasCountryCode =
-    countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
+  // Extraire locale et countryCode de l'URL
+  const pathSegments = request.nextUrl.pathname.split("/").filter(Boolean)
+  const urlLocale = pathSegments[0] // Premier segment = locale (fr/en)
+  const urlCountryCode = pathSegments[1] // Deuxième segment = countryCode (fr/dk/etc)
 
-  // check if one of the country codes is in the url
+  // Vérifier si locale et countryCode sont dans l'URL
+  const validLocales = ["fr", "en"]
+  const urlHasLocale = validLocales.includes(urlLocale)
+  const urlHasCountryCode = countryCode && urlCountryCode === countryCode
+
+  // Si l'URL a déjà locale + countryCode corrects, continuer
   if (
+    urlHasLocale &&
     urlHasCountryCode &&
     (!isOnboarding || onboardingCookie) &&
     (!cartId || cartIdCookie)
@@ -111,8 +121,24 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const redirectPath =
-    request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
+  // Déterminer la locale (depuis cookie ou défaut)
+  const savedLocale = request.cookies.get("NEXT_LOCALE")?.value
+  const locale = savedLocale && validLocales.includes(savedLocale) ? savedLocale : DEFAULT_LOCALE
+
+  // Calculer le chemin après /{locale}/{countryCode}
+  // Si l'URL a déjà locale et countryCode, extraire le reste
+  let redirectPath = ""
+  if (urlHasLocale && urlCountryCode) {
+    // Chemin après les 2 premiers segments
+    const remainingSegments = pathSegments.slice(2)
+    redirectPath = remainingSegments.length > 0 ? `/${remainingSegments.join("/")}` : ""
+  } else if (urlLocale && !urlHasLocale) {
+    // Si le premier segment n'est pas une locale valide, c'est peut-être un countryCode
+    redirectPath = request.nextUrl.pathname
+  } else {
+    // Sinon, prendre tout le chemin
+    redirectPath = request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
+  }
 
   const queryString = request.nextUrl.search ? request.nextUrl.search : ""
 
@@ -120,9 +146,9 @@ export async function middleware(request: NextRequest) {
 
   let response = NextResponse.redirect(redirectUrl, 307)
 
-  // If no country code is set, we redirect to the relevant region.
-  if (!urlHasCountryCode && countryCode) {
-    redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
+  // Si locale ou countryCode manquants, rediriger vers /{locale}/{countryCode}/...
+  if ((!urlHasLocale || !urlHasCountryCode) && countryCode) {
+    redirectUrl = `${request.nextUrl.origin}/${locale}/${countryCode}${redirectPath}${queryString}`
     response = NextResponse.redirect(`${redirectUrl}`, 307)
   }
 

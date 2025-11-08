@@ -13,15 +13,18 @@ const LanguageSwitcher = () => {
   const pathname = usePathname()
   const router = useRouter()
   
+  const locale = params?.locale as string | undefined
   const countryCode = params?.countryCode as string | undefined
-  const currentPath = countryCode ? pathname?.split(`/${countryCode}`)[1] : pathname
 
   useEffect(() => {
     setMounted(true)
-    if (i18n.language) {
+    // Synchroniser avec le locale de l'URL
+    if (locale) {
+      setCurrentLang(locale)
+    } else if (i18n.language) {
       setCurrentLang(i18n.language.toLowerCase())
     }
-  }, [i18n.language])
+  }, [locale, i18n.language])
 
   // SVG flags
   const FrenchFlag = () => (
@@ -46,18 +49,26 @@ const LanguageSwitcher = () => {
     if (lang === currentLang) return
     
     try {
+      // Sauvegarder la langue dans localStorage et cookie
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('i18nextLng', lang)
+        document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000`
+      }
+      
       // Changer la langue dans i18n
       if (i18n && typeof i18n.changeLanguage === 'function') {
         await i18n.changeLanguage(lang)
         setCurrentLang(lang)
-        window.dispatchEvent(new Event('languageChanged'))
       }
       
-      // Changer le countryCode dans l'URL pour correspondre à la langue
-      await updateRegion(lang, currentPath || '/')
+      // Construire la nouvelle URL : /{nouvelle-langue}/{countryCode}/...
+      // Extraire le chemin après /{locale}/{countryCode}
+      const pathSegments = pathname?.split("/").filter(Boolean) || []
+      const pathAfterLocaleAndCountry = pathSegments.slice(2).join("/")
+      const newPath = `/${lang}/${countryCode}${pathAfterLocaleAndCountry ? `/${pathAfterLocaleAndCountry}` : ''}`
       
-      // Recharger la page pour que tous les composants se mettent à jour
-      window.location.reload()
+      // Naviguer vers la nouvelle URL
+      window.location.href = newPath
     } catch (error) {
       console.warn('Erreur changement langue:', error)
     }

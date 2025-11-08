@@ -72,24 +72,25 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
         onChange={handleChange}
         value={current}
       >
-        <Listbox.Button className="w-full flex items-center justify-between gap-3 rounded-xl bg-white hover:bg-gray-50 px-4 py-4 text-gray-800 font-medium text-base transition-all duration-300 shadow-sm hover:shadow-md border-2 border-gray-200 hover:border-primary/30 active:scale-98 min-h-[60px]">
-          <span className="font-medium flex items-center gap-2.5 flex-1 text-left">
-            <span className="flex items-center gap-2.5">
-              {t('shipping.to')} :
+        {/* Desktop: style original compact, Mobile: style amélioré avec plus d'espace */}
+        <Listbox.Button className="w-full flex items-center justify-between gap-2 md:gap-3 rounded-xl bg-white hover:bg-gray-50 px-4 py-3 md:py-4 text-gray-800 md:text-primary font-medium md:font-semibold text-sm md:text-base transition-all duration-300 shadow-sm hover:shadow-md border md:border-2 border-gray-200 hover:border-primary/30 active:scale-98 min-h-[56px] md:min-h-[60px]">
+          <span className="font-medium flex items-center gap-2 md:gap-2.5 flex-1 text-left">
+            <span className="flex items-center gap-2 md:gap-2.5">
+              {t('shipping.to')}
               {current && (
-                <span className="flex items-center gap-2.5 font-semibold">
+                <span className="flex items-center gap-2 md:gap-2.5 font-semibold">
                   <ReactCountryFlag
                     svg
-                    style={{ width: "28px", height: "21px" }}
-                    className="rounded-sm shadow-sm"
+                    style={{ width: "24px", height: "18px" }}
+                    className="rounded-sm shadow-sm md:w-[28px] md:h-[21px]"
                     countryCode={current.country ?? ""}
                   />
-                  <span className="text-primary">{current.label}</span>
+                  <span className="md:text-primary">{current.label}</span>
                 </span>
               )}
             </span>
           </span>
-          <svg className="w-5 h-5 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-600 md:text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
           </svg>
         </Listbox.Button>
@@ -99,23 +100,24 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
+          {/* Desktop: options compactes, Mobile: options plus grandes */}
           <Listbox.Options
-            className="absolute top-full mt-2 left-0 right-0 max-h-[320px] overflow-y-auto z-[10000] bg-white drop-shadow-2xl shadow-2xl text-base rounded-xl w-full border-2 border-primary/20"
+            className="absolute top-full mt-2 left-0 right-0 max-h-[280px] md:max-h-[320px] overflow-y-auto z-[10000] bg-white drop-shadow-2xl shadow-2xl text-sm md:text-base rounded-xl w-full border-2 border-primary/20"
           >
               {options?.map((o, index) => {
                 return (
                   <Listbox.Option
                     key={index}
                     value={o}
-                    className="py-3.5 px-4 hover:bg-primary/10 active:bg-primary/20 cursor-pointer flex items-center gap-x-3 transition-colors duration-150 border-b border-gray-100 last:border-0 min-h-[56px]"
+                    className="py-3 md:py-3.5 px-3 md:px-4 hover:bg-primary/10 active:bg-primary/20 cursor-pointer flex items-center gap-x-2.5 md:gap-x-3 transition-colors duration-150 border-b border-gray-100 last:border-0 min-h-[52px] md:min-h-[56px]"
                   >
                     <ReactCountryFlag
                       svg
                       style={{
-                        width: "24px",
-                        height: "18px",
+                        width: "22px",
+                        height: "16px",
                       }}
-                      className="rounded-sm shadow-sm flex-shrink-0"
+                      className="rounded-sm shadow-sm flex-shrink-0 md:w-[24px] md:h-[18px]"
                       countryCode={o?.country ?? ""}
                     />
                     <span className="font-medium text-gray-800">{o?.label}</span>

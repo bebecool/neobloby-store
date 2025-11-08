@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams, usePathname } from 'next/navigation'
+import { updateRegion } from "@lib/data/cart"
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState('fr')
   const [mounted, setMounted] = useState(false)
+  const { countryCode } = useParams()
+  const currentPath = usePathname().split(`/${countryCode}`)[1]
 
   useEffect(() => {
     setMounted(true)
@@ -38,11 +42,15 @@ const LanguageSwitcher = () => {
     if (lang === currentLang) return
     
     try {
+      // Changer la langue dans i18n
       if (i18n && typeof i18n.changeLanguage === 'function') {
         await i18n.changeLanguage(lang)
         setCurrentLang(lang)
         window.dispatchEvent(new Event('languageChanged'))
       }
+      
+      // Changer le countryCode dans l'URL pour correspondre à la langue
+      await updateRegion(lang, currentPath || '/')
     } catch (error) {
       console.warn('Erreur changement langue:', error)
     }

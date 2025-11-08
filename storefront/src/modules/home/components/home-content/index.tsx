@@ -9,7 +9,7 @@ export default function HomeContent({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30">
       {/* Section des produits avec design premium */}
-      <div className="relative pt-4 pb-6 bg-white overflow-hidden">
+  <div className="relative pt-2 pb-4 bg-white overflow-hidden">
         {/* Background pattern subtil */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 left-10 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl"></div>
@@ -30,7 +30,7 @@ export default function HomeContent({ children }: { children: React.ReactNode })
       </div>
 
       {/* Section avantages */}
-      <section className="relative py-6 bg-gradient-to-br from-gray-50 to-blue-50/50 overflow-hidden">
+  <section className="relative py-4 bg-gradient-to-br from-gray-50 to-blue-50/50 overflow-hidden">
         {/* Pattern de fond animé */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute animate-pulse top-20 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-2xl"></div>
@@ -127,7 +127,7 @@ export default function HomeContent({ children }: { children: React.ReactNode })
           </div>
 
           {/* Section stats premium */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
             <div className="text-center p-4 rounded-2xl bg-white/70 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="text-3xl font-bold text-primary mb-1">1426</div>
               <div className="text-gray-600 font-medium text-sm">{t('home.satisfiedCustomers')}</div>

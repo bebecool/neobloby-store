@@ -30,7 +30,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   const currentPath = usePathname().split(`/${countryCode}`)[1]
 
   const options = useMemo(() => {
-    return regions
+    const allOptions = regions
       ?.map((r) => {
         return r.countries?.map((c) => ({
           country: c.iso_2,
@@ -39,7 +39,19 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
         }))
       })
       .flat()
-      .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
+    
+    // Trier avec la France en premier, puis par ordre alphabétique
+    return allOptions?.sort((a, b) => {
+      const aCountry = a?.country?.toLowerCase()
+      const bCountry = b?.country?.toLowerCase()
+      
+      // Mettre la France en premier
+      if (aCountry === 'fr') return -1
+      if (bCountry === 'fr') return 1
+      
+      // Ensuite trier par nom de pays
+      return (a?.label ?? "").localeCompare(b?.label ?? "")
+    })
   }, [regions])
 
   useEffect(() => {

@@ -62,21 +62,21 @@ const LanguageSwitcher = () => {
   // Ne pas render pendant l'hydratation
   if (!mounted) {
     return (
-      <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-2xl p-1.5">
-        <div className="w-14 h-10 bg-white/30 rounded-xl"></div>
-        <div className="w-14 h-10 bg-white/30 rounded-xl"></div>
+      <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-2xl p-1.5 shadow-sm">
+        <div className="w-14 h-10 bg-gray-100 rounded-xl"></div>
+        <div className="w-14 h-10 bg-gray-100 rounded-xl"></div>
       </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-2xl p-1.5">
+    <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-2xl p-1.5 shadow-sm">
       <button
         onClick={() => toggleLanguage('fr')}
         className={`flex items-center justify-center w-14 h-10 rounded-xl transition-all duration-300 ${
           currentLang === 'fr'
-            ? 'bg-white shadow-lg scale-105'
-            : 'bg-transparent hover:bg-white/10'
+            ? 'bg-primary shadow-md scale-105'
+            : 'bg-transparent hover:bg-gray-50'
         }`}
         aria-label="Français"
       >
@@ -86,8 +86,8 @@ const LanguageSwitcher = () => {
         onClick={() => toggleLanguage('en')}
         className={`flex items-center justify-center w-14 h-10 rounded-xl transition-all duration-300 ${
           currentLang === 'en'
-            ? 'bg-white shadow-lg scale-105'
-            : 'bg-transparent hover:bg-white/10'
+            ? 'bg-primary shadow-md scale-105'
+            : 'bg-transparent hover:bg-gray-50'
         }`}
         aria-label="English"
       >

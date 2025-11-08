@@ -55,7 +55,7 @@ export default async function Nav() {
           </div>
 
           {/* Navigation desktop avec design NeoBloby */}
-          <nav className="hidden md:flex items-center gap-6 text-base font-medium">
+          <nav className="hidden md:flex items-center gap-4 text-base font-medium">
             <NavLinks />
             
             {/* Sélecteur de langue */}

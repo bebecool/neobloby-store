@@ -77,20 +77,20 @@ const SideMenu = ({
 
       {/* Menu Sidebar avec animation fluide comme le panier */}
       {menuVisible && (
-        <div className="fixed inset-0 z-[9999]" style={{ pointerEvents: 'none' }}>
+  <div className="fixed inset-0 z-[100000]" style={{ pointerEvents: 'none' }}>
           {/* Backdrop cliquable pour fermer le menu */}
           <div
-            className={`absolute inset-0 z-[9998] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 z-[99999] bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${menuOpen ? "opacity-100" : "opacity-0"}`}
             aria-label="Fermer le menu"
             tabIndex={-1}
             onClick={(e) => {
               if (e.target === e.currentTarget) close();
             }}
-            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+            style={{ cursor: 'pointer', pointerEvents: menuOpen ? 'auto' : 'none' }}
           />
           
           {/* Panneau du menu - responsive : pleine largeur mobile, largeur fixe desktop */}
-          <div className="absolute inset-y-0 right-0 z-[9999] w-full md:w-[28rem]" style={{ pointerEvents: 'auto' }}>
+          <div className="absolute inset-y-0 right-0 z-[100001] w-full md:w-[28rem]" style={{ pointerEvents: 'auto' }}>
             <div className="h-full">
               <div 
                 data-testid="nav-menu-popup"
@@ -124,7 +124,7 @@ const SideMenu = ({
                   </div>
 
                   {/* Paramètres en haut - Langue et Pays */}
-                  <div className="px-6 py-3 border-b border-white/10 bg-black/10 backdrop-blur-sm space-y-3">
+                  <div className="px-6 py-3 border-b border-white/10 bg-black/10 backdrop-blur-sm space-y-3 relative z-[100]">
                     {/* Sélecteur de langue */}
                     <div>
                       <label className="text-white text-xs font-medium mb-1.5 block">
@@ -143,7 +143,7 @@ const SideMenu = ({
                   </div>
 
                   {/* Navigation principale */}
-                  <div className="flex-1 overflow-y-auto px-6 py-3">
+                  <div className="flex-1 overflow-y-auto px-6 py-3 relative z-[10]">
                     <ul className="flex flex-col gap-1">
                       {Object.entries(SideMenuItems).map(([name, href]) => {
                         return (

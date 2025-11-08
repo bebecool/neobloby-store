@@ -66,7 +66,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }
 
   return (
-    <div className="relative z-[200]">
+    <div className="relative z-[9999]">
       <Listbox
         as="span"
         onChange={handleChange}
@@ -100,9 +100,9 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          {/* Desktop: options compactes, Mobile: options plus grandes et z-index très élevé */}
+          {/* Dropdown avec z-index très élevé pour passer au-dessus des éléments du menu */}
           <Listbox.Options
-            className="absolute top-full mt-2 left-0 right-0 max-h-[280px] md:max-h-[320px] overflow-y-auto z-[99999] bg-white drop-shadow-2xl shadow-2xl text-base md:text-base rounded-xl w-full border-2 border-primary/20"
+            className="absolute top-full mt-3 left-0 right-0 max-h-[280px] md:max-h-[320px] overflow-y-auto z-[10000] bg-white shadow-4xl drop-shadow-2xl border-2 border-primary/20 ring-2 ring-primary/10 rounded-xl w-full text-base md:text-base pb-2"
           >
               {options?.map((o, index) => {
                 return (

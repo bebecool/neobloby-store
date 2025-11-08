@@ -31,9 +31,9 @@ export default function ChatWidget() {
   }, [open]);
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end pointer-events-none">
       {open ? (
-        <div className="w-[340px] rounded-2xl border bg-white shadow-soft">
+        <div className="w-[340px] rounded-2xl border bg-white shadow-soft pointer-events-auto">
           <div className="flex items-center justify-between rounded-t-2xl bg-primary px-3 py-2 text-white">
             <div className="font-semibold">{t('assistant.title')}</div>
             <button onClick={() => setOpen(false)} className="rounded bg-white/20 px-2 py-1 text-sm">{t('assistant.close')}</button>
@@ -47,7 +47,7 @@ export default function ChatWidget() {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="flex flex-col items-center group focus:outline-none"
+          className="flex flex-col items-center group focus:outline-none pointer-events-auto"
           style={{background:'none', border:'none', padding:0}}
           aria-label="Ouvrir l'assistant Bloby"
         >

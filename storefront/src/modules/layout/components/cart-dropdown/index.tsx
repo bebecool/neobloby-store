@@ -124,10 +124,10 @@ const CartDropdown = ({ cart, onClick, buttonClassName = "relative rounded-xl bg
           </div>
         </button>
 
-        {/* Mini-panier au survol */}
+        {/* Mini-panier au survol - DESKTOP UNIQUEMENT */}
         {showDropdown && (
           <div 
-            className="absolute top-full right-0 mt-1 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+            className="hidden md:block absolute top-full right-0 mt-1 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >

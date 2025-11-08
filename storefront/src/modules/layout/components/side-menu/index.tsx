@@ -77,20 +77,32 @@ const SideMenu = ({
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <Popover.Panel className="flex flex-col fixed w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[100] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
                   <div
                     data-testid="nav-menu-popup"
                     className="flex flex-col h-full bg-gradient-to-br from-primary/95 via-purple-600/95 to-primary/95 rounded-3xl justify-between shadow-2xl overflow-hidden"
                   >
-                    {/* Header avec bouton fermer */}
+                    {/* Header avec bouton fermer mobile et desktop */}
                     <div className="flex justify-between items-center p-6 pb-4 border-b border-white/10">
                       <div className="text-white">
                         <h2 className="text-3xl font-bold tracking-tight">Menu</h2>
                       </div>
+                      {/* Bouton mobile : blanc avec croix noire */}
+                      <button 
+                        data-testid="close-menu-button-mobile" 
+                        onClick={close}
+                        className="flex md:hidden items-center justify-center bg-white rounded-full shadow-2xl p-3 border border-gray-300 hover:bg-gray-100 transition-all duration-200"
+                        aria-label="Fermer le menu"
+                      >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-700">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                      {/* Bouton desktop : transparent avec croix blanche */}
                       <button 
                         data-testid="close-menu-button" 
                         onClick={close}
-                        className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
+                        className="hidden md:flex p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                       >
                         <XMark className="text-white w-6 h-6" />
                       </button>

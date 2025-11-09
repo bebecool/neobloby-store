@@ -16,7 +16,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const locales = ['fr', 'en']
+  const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
   const product_categories = await listCategories()
 
   if (!product_categories) {

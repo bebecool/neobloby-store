@@ -4,6 +4,7 @@ import { Text, clx } from "@medusajs/ui"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
+import UserManualLink from "@modules/layout/components/user-manual-link"
 
 export default async function Footer() {
   const { collections } = await getCollectionsList(0, 6)
@@ -110,14 +111,7 @@ export default async function Footer() {
               <span className="txt-small-plus txt-ui-fg-base">Help</span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
-                  <a
-                    href="https://github.com/medusajs"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    User Manual
-                  </a>
+                  <UserManualLink />
                 </li>
 
               </ul>

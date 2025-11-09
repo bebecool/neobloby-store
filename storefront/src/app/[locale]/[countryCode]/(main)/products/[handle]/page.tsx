@@ -10,7 +10,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const locales = ['fr', 'en']
+  const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
   const countryCodes = await listRegions().then(
     (regions) =>
       regions

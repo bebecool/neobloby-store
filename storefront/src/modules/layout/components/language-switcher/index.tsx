@@ -2,23 +2,91 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams, usePathname, useRouter } from 'next/navigation'
-import { updateRegion } from "@lib/data/cart"
+import { useParams, usePathname } from 'next/navigation'
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState('fr')
   const [mounted, setMounted] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const params = useParams()
   const pathname = usePathname()
-  const router = useRouter()
   
   const locale = params?.locale as string | undefined
   const countryCode = params?.countryCode as string | undefined
 
+  const languages = [
+    { 
+      code: 'fr', 
+      name: 'Français', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="8" height="18" fill="#002654"/>
+          <rect x="8" width="8" height="18" fill="#FFFFFF"/>
+          <rect x="16" width="8" height="18" fill="#CE1126"/>
+        </svg>
+      )
+    },
+    { 
+      code: 'en', 
+      name: 'English', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="24" height="18" fill="#012169"/>
+          <path d="M0 0L24 18M24 0L0 18" stroke="#FFFFFF" strokeWidth="2"/>
+          <path d="M0 0L24 18M24 0L0 18" stroke="#C8102E" strokeWidth="1"/>
+          <path d="M12 0V18M0 9H24" stroke="#FFFFFF" strokeWidth="3"/>
+          <path d="M12 0V18M0 9H24" stroke="#C8102E" strokeWidth="2"/>
+        </svg>
+      )
+    },
+    { 
+      code: 'de', 
+      name: 'Deutsch', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="24" height="6" fill="#000000"/>
+          <rect y="6" width="24" height="6" fill="#DD0000"/>
+          <rect y="12" width="24" height="6" fill="#FFCE00"/>
+        </svg>
+      )
+    },
+    { 
+      code: 'es', 
+      name: 'Español', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="24" height="18" fill="#AA151B"/>
+          <rect y="4.5" width="24" height="9" fill="#F1BF00"/>
+        </svg>
+      )
+    },
+    { 
+      code: 'it', 
+      name: 'Italiano', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="8" height="18" fill="#009246"/>
+          <rect x="8" width="8" height="18" fill="#FFFFFF"/>
+          <rect x="16" width="8" height="18" fill="#CE2B37"/>
+        </svg>
+      )
+    },
+    { 
+      code: 'nl', 
+      name: 'Nederlands', 
+      flag: (
+        <svg width="24" height="18" viewBox="0 0 24 18" className="rounded shadow-sm">
+          <rect width="24" height="6" fill="#AE1C28"/>
+          <rect y="6" width="24" height="6" fill="#FFFFFF"/>
+          <rect y="12" width="24" height="6" fill="#21468B"/>
+        </svg>
+      )
+    },
+  ]
+
   useEffect(() => {
     setMounted(true)
-    // Synchroniser avec le locale de l'URL
     if (locale) {
       setCurrentLang(locale)
     } else if (i18n.language) {
@@ -26,85 +94,86 @@ const LanguageSwitcher = () => {
     }
   }, [locale, i18n.language])
 
-  // SVG flags
-  const FrenchFlag = () => (
-    <svg width="24" height="18" viewBox="0 0 24 18" className="rounded">
-      <rect width="8" height="18" fill="#002654"/>
-      <rect x="8" width="8" height="18" fill="#FFFFFF"/>
-      <rect x="16" width="8" height="18" fill="#CE1126"/>
-    </svg>
-  )
-
-  const BritishFlag = () => (
-    <svg width="24" height="18" viewBox="0 0 24 18" className="rounded">
-      <rect width="24" height="18" fill="#012169"/>
-      <path d="M0 0L24 18M24 0L0 18" stroke="#FFFFFF" strokeWidth="2"/>
-      <path d="M0 0L24 18M24 0L0 18" stroke="#C8102E" strokeWidth="1"/>
-      <path d="M12 0V18M0 9H24" stroke="#FFFFFF" strokeWidth="3"/>
-      <path d="M12 0V18M0 9H24" stroke="#C8102E" strokeWidth="2"/>
-    </svg>
-  )
-
   const toggleLanguage = async (lang: string) => {
-    if (lang === currentLang) return
+    if (lang === currentLang) {
+      setIsOpen(false)
+      return
+    }
     
     try {
-      // Sauvegarder la langue dans localStorage et cookie pour persistance
+      setCurrentLang(lang)
+      
       if (typeof window !== 'undefined') {
         localStorage.setItem('i18nextLng', lang)
         document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000`
       }
       
-      // Construire la nouvelle URL : /{nouvelle-langue}/{countryCode}/...
-      // Extraire le chemin après /{locale}/{countryCode}
       const pathSegments = pathname?.split("/").filter(Boolean) || []
       const pathAfterLocaleAndCountry = pathSegments.slice(2).join("/")
       const newPath = `/${lang}/${countryCode}${pathAfterLocaleAndCountry ? `/${pathAfterLocaleAndCountry}` : ''}`
       
-      console.log('🔄 Changing language to:', lang)
-      console.log('📍 Navigating to:', newPath)
-      
-      // Naviguer vers la nouvelle URL - la langue sera détectée au chargement
       window.location.href = newPath
     } catch (error) {
       console.warn('Erreur changement langue:', error)
     }
   }
 
-  // Ne pas render pendant l'hydratation
   if (!mounted) {
     return (
-      <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-2xl p-1.5 shadow-sm">
-        <div className="w-14 h-10 bg-gray-100 rounded-xl"></div>
-        <div className="w-14 h-10 bg-gray-100 rounded-xl"></div>
+      <div className="relative">
+        <div className="w-32 h-10 bg-gray-100 rounded-xl animate-pulse"></div>
       </div>
     )
   }
 
+  const currentLanguage = languages.find(l => l.code === currentLang) || languages[0]
+
   return (
-    <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-2xl p-1.5 shadow-sm">
+    <div className="relative">
       <button
-        onClick={() => toggleLanguage('fr')}
-        className={`flex items-center justify-center w-14 h-10 rounded-xl transition-all duration-300 ${
-          currentLang === 'fr'
-            ? 'bg-primary shadow-md scale-105'
-            : 'bg-transparent hover:bg-gray-50'
-        }`}
-        aria-label="Français"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-sm"
+        aria-label="Changer de langue"
       >
-        <FrenchFlag />
+        <span className="flex-shrink-0">{currentLanguage.flag}</span>
+        <span className="text-sm font-medium text-gray-700 hidden sm:inline">{currentLanguage.name}</span>
+        <svg 
+          className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
-      <button
-        onClick={() => toggleLanguage('en')}
-        className={`flex items-center justify-center w-14 h-10 rounded-xl transition-all duration-300 ${
-          currentLang === 'en'
-            ? 'bg-primary shadow-md scale-105'
-            : 'bg-transparent hover:bg-gray-50'
-        }`}
-        aria-label="English"
-      >
-        <BritishFlag />
-      </button>
+
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => toggleLanguage(lang.code)}
+                className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
+                  currentLang === lang.code ? 'bg-primary/10 text-primary font-medium' : 'text-gray-700'
+                }`}
+              >
+                <span className="flex-shrink-0">{lang.flag}</span>
+                <span className="text-sm">{lang.name}</span>
+                {currentLang === lang.code && (
+                  <svg className="w-4 h-4 ml-auto text-primary" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

@@ -103,11 +103,11 @@ export async function middleware(request: NextRequest) {
 
   // Extraire locale et countryCode de l'URL
   const pathSegments = request.nextUrl.pathname.split("/").filter(Boolean)
-  const urlLocale = pathSegments[0] // Premier segment = locale (fr/en)
+  const urlLocale = pathSegments[0] // Premier segment = locale (fr/en/de/es/it/nl)
   const urlCountryCode = pathSegments[1] // Deuxième segment = countryCode (fr/dk/etc)
 
   // Vérifier si locale et countryCode sont dans l'URL
-  const validLocales = ["fr", "en"]
+  const validLocales = ["fr", "en", "de", "es", "it", "nl"]
   const urlHasLocale = validLocales.includes(urlLocale)
   const urlHasCountryCode = countryCode && urlCountryCode === countryCode
 

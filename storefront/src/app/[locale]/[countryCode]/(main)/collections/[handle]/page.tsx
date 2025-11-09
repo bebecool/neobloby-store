@@ -11,7 +11,7 @@ import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 type Props = {
-  params: { handle: string; countryCode: string }
+  params: { locale: string; handle: string; countryCode: string }
   searchParams: {
     page?: string
     sortBy?: SortOptions
@@ -21,6 +21,7 @@ type Props = {
 export const PRODUCT_LIMIT = 12
 
 export async function generateStaticParams() {
+  const locales = ['fr', 'en']
   const { collections } = await getCollectionsList()
 
   if (!collections) {
@@ -39,12 +40,17 @@ export async function generateStaticParams() {
     (collection: StoreCollection) => collection.handle
   )
 
-  const staticParams = countryCodes
-    ?.map((countryCode: string) =>
-      collectionHandles.map((handle: string | undefined) => ({
-        countryCode,
-        handle,
-      }))
+  const staticParams = locales
+    .map((locale) =>
+      countryCodes
+        ?.map((countryCode: string) =>
+          collectionHandles.map((handle: string | undefined) => ({
+            locale,
+            countryCode,
+            handle,
+          }))
+        )
+        .flat()
     )
     .flat()
 

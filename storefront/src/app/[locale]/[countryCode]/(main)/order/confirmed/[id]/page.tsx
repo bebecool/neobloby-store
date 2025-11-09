@@ -7,7 +7,7 @@ import { retrieveOrder } from "@lib/data/orders"
 import { HttpTypes } from "@medusajs/types"
 
 type Props = {
-  params: { id: string }
+  params: { locale: string; countryCode: string; id: string }
 }
 
 async function getOrder(id: string) {

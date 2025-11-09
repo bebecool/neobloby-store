@@ -8,7 +8,7 @@ import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 type Props = {
-  params: { category: string[]; countryCode: string }
+  params: { locale: string; category: string[]; countryCode: string }
   searchParams: {
     sortBy?: SortOptions
     page?: string
@@ -16,6 +16,7 @@ type Props = {
 }
 
 export async function generateStaticParams() {
+  const locales = ['fr', 'en']
   const product_categories = await listCategories()
 
   if (!product_categories) {
@@ -30,12 +31,17 @@ export async function generateStaticParams() {
     (category: any) => category.handle
   )
 
-  const staticParams = countryCodes
-    ?.map((countryCode: string | undefined) =>
-      categoryHandles.map((handle: any) => ({
-        countryCode,
-        category: [handle],
-      }))
+  const staticParams = locales
+    .map((locale) =>
+      countryCodes
+        ?.map((countryCode: string | undefined) =>
+          categoryHandles.map((handle: any) => ({
+            locale,
+            countryCode,
+            category: [handle],
+          }))
+        )
+        .flat()
     )
     .flat()
 

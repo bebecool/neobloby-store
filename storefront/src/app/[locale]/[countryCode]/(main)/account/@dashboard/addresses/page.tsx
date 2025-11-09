@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function Addresses({
   params,
 }: {
-  params: { countryCode: string }
+  params: { locale: string; countryCode: string }
 }) {
   const { countryCode } = params
   const customer = await getCustomer()

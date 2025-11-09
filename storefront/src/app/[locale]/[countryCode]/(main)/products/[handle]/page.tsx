@@ -6,10 +6,11 @@ import { getRegion, listRegions } from "@lib/data/regions"
 import { getProductByHandle, getProductsList } from "@lib/data/products"
 
 type Props = {
-  params: { countryCode: string; handle: string }
+  params: { locale: string; countryCode: string; handle: string }
 }
 
 export async function generateStaticParams() {
+  const locales = ['fr', 'en']
   const countryCodes = await listRegions().then(
     (regions) =>
       regions
@@ -30,12 +31,17 @@ export async function generateStaticParams() {
     responses.map(({ response }) => response.products).flat()
   )
 
-  const staticParams = countryCodes
-    ?.map((countryCode) =>
-      products.map((product) => ({
-        countryCode,
-        handle: product.handle,
-      }))
+  const staticParams = locales
+    .map((locale) =>
+      countryCodes
+        ?.map((countryCode) =>
+          products.map((product) => ({
+            locale,
+            countryCode,
+            handle: product.handle,
+          }))
+        )
+        .flat()
     )
     .flat()
 

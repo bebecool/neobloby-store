@@ -7,7 +7,7 @@ import { enrichLineItems } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 
 type Props = {
-  params: { id: string }
+  params: { locale: string; countryCode: string; id: string }
 }
 
 async function getOrder(id: string) {

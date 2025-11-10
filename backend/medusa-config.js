@@ -43,17 +43,6 @@ const medusaConfig = {
   admin: {
     backendUrl: BACKEND_URL,
     disable: SHOULD_DISABLE_ADMIN,
-    vite: () => ({
-      build: {
-        rollupOptions: {
-          external: (id) => {
-            // Externaliser les modules qui causent des erreurs de résolution
-            return id.includes('@medusajs/draft-order/admin') || 
-                   id.includes('@medusajs/admin-shared')
-          }
-        }
-      }
-    })
   },
   modules: [
     {

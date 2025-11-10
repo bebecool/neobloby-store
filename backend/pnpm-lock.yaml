@@ -11,12 +11,18 @@ importers:
       '@medusajs/admin-sdk':
         specifier: 2.11.3
         version: 2.11.3
+      '@medusajs/admin-shared':
+        specifier: ^2.11.3
+        version: 2.11.3
       '@medusajs/cli':
         specifier: 2.11.3
         version: 2.11.3(@types/node@20.19.17)
       '@medusajs/dashboard':
         specifier: 2.11.3
         version: 2.11.3(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(typescript@5.9.2)
+      '@medusajs/draft-order':
+        specifier: ^2.11.3
+        version: 2.11.3(@medusajs/admin-sdk@2.11.3)(@medusajs/cli@2.11.3(@types/node@20.19.17))(@medusajs/framework@2.11.3(@medusajs/cli@2.11.3(@types/node@20.19.17))(@types/node@20.19.17)(ioredis@5.8.2)(vite@5.4.20(@types/node@20.19.17)))(@medusajs/icons@2.11.3(react@18.3.1))(@medusajs/test-utils@2.11.3(@medusajs/framework@2.11.3(@medusajs/cli@2.11.3(@types/node@20.19.17))(@types/node@20.19.17)(ioredis@5.8.2)(vite@5.4.20(@types/node@20.19.17)))(@medusajs/medusa@2.11.3))(@medusajs/ui@4.0.27(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.2))(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.20.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@medusajs/framework':
         specifier: 2.11.3
         version: 2.11.3(@medusajs/cli@2.11.3(@types/node@20.19.17))(@types/node@20.19.17)(ioredis@5.8.2)(vite@5.4.20(@types/node@20.19.17))

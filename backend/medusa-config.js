@@ -38,33 +38,11 @@ const medusaConfig = {
       storeCors: STORE_CORS,
       jwtSecret: JWT_SECRET,
       cookieSecret: COOKIE_SECRET
-    },
-    build: {
-      rollupOptions: {
-        external: (id) => {
-          // Externaliser tous les modules @medusajs qui se terminent par /admin ou certains modules spécifiques
-          return /^@medusajs\/(.*\/)?admin$/.test(id) || 
-                 id === '@medusajs/dashboard' ||
-                 id.startsWith('@medusajs/draft-order')
-        }
-      }
     }
   },
   admin: {
     backendUrl: BACKEND_URL,
     disable: SHOULD_DISABLE_ADMIN,
-    vite: () => ({
-      build: {
-        rollupOptions: {
-          external: (id) => {
-            // Externaliser tous les modules @medusajs qui se terminent par /admin ou certains modules spécifiques
-            return /^@medusajs\/(.*\/)?admin$/.test(id) || 
-                   id === '@medusajs/dashboard' ||
-                   id.startsWith('@medusajs/draft-order')
-          }
-        }
-      }
-    })
   },
   modules: [
     {
@@ -79,8 +57,7 @@ const medusaConfig = {
               endPoint: MINIO_ENDPOINT,
               accessKey: MINIO_ACCESS_KEY,
               secretKey: MINIO_SECRET_KEY,
-              bucket: MINIO_BUCKET, // Optional, default: medusa-media,
-              publicUrl: process.env.MINIO_PUBLIC_URL // ✅ rajoute ça
+              bucket: MINIO_BUCKET // Optional, default: medusa-media
             }
           }] : [{
             resolve: '@medusajs/file-local',

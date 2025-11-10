@@ -35,15 +35,31 @@ const CountryLanguageSelect = ({ toggleState, regions }: CountryLanguageSelectPr
     | undefined
   >(undefined)
 
-  const { countryCode } = useParams()
-  const currentPath = usePathname().split(`/${countryCode}`)[1]
+  const params = useParams()
+  const pathname = usePathname()
+  const countryCode = params?.countryCode as string | undefined
+  const locale = params?.locale as string | undefined
+  
+  const currentPath = pathname?.split(`/${countryCode}`)[1] || ""
 
   const { state, close } = toggleState
+  const { t } = useTranslation()
 
   const languages: LanguageOption[] = [
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'en', name: 'English', flag: '🇬🇧' }
+    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+    { code: 'nl', name: 'Nederlands', flag: '🇳🇱' }
   ]
+
+  // Synchroniser i18n avec la locale de l'URL
+  useEffect(() => {
+    if (locale && i18n.language !== locale) {
+      i18n.changeLanguage(locale)
+    }
+  }, [locale, i18n])
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0]
 
@@ -73,7 +89,21 @@ const CountryLanguageSelect = ({ toggleState, regions }: CountryLanguageSelectPr
   }
 
   const handleLanguageChange = (langCode: string) => {
-    i18n.changeLanguage(langCode)
+    // Sauvegarder la langue dans un cookie
+    document.cookie = `NEXT_LOCALE=${langCode}; path=/; max-age=${60 * 60 * 24 * 365}`
+    
+    // Construire la nouvelle URL en remplaçant la locale actuelle
+    const pathSegments = window.location.pathname.split("/").filter(Boolean)
+    
+    // Si on a déjà une structure /{locale}/{countryCode}/..., on remplace juste la locale
+    if (pathSegments.length >= 2) {
+      pathSegments[0] = langCode // Remplacer la locale (premier segment)
+      const newPath = `/${pathSegments.join("/")}`
+      window.location.href = newPath + window.location.search
+    } else {
+      // Sinon construire l'URL de base
+      window.location.href = `/${langCode}/${countryCode}` + window.location.search
+    }
   }
 
   return (
@@ -113,7 +143,7 @@ const CountryLanguageSelect = ({ toggleState, regions }: CountryLanguageSelectPr
 
           {/* Section Pays */}
           <div className="px-3 py-2">
-            <div className="text-xs font-medium text-gray-500 mb-2">SHIPPING TO</div>
+            <div className="text-xs font-medium text-gray-500 mb-2">{t('shipping.shippingTo')}</div>
             <div className="space-y-1 max-h-64 overflow-auto">
               {options?.map((option, index) => {
                 return (

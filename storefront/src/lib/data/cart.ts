@@ -6,7 +6,7 @@ import { HttpTypes } from "@medusajs/types"
 import { omit } from "lodash"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
-import { getAuthHeaders, getCartId, removeCartId, setCartId } from "./cookies"
+import { getAuthHeaders, getCartId, removeCartId, setCartId, getLocale } from "./cookies"
 import { getProductsById } from "./products"
 import { getRegion } from "./regions"
 
@@ -344,8 +344,10 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     return e.message
   }
 
+  const locale = formData.get("locale") || "fr"
+  const countryCode = formData.get("shipping_address.country_code")
   redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
+    `/${locale}/${countryCode}/checkout?step=delivery`
   )
 }
 
@@ -366,8 +368,9 @@ export async function placeOrder() {
   if (cartRes?.type === "order") {
     const countryCode =
       cartRes.order.shipping_address?.country_code?.toLowerCase()
+    const locale = getLocale()
     removeCartId()
-    redirect(`/${countryCode}/order/confirmed/${cartRes?.order.id}`)
+    redirect(`/${locale}/${countryCode}/order/confirmed/${cartRes?.order.id}`)
   }
 
   return cartRes.cart

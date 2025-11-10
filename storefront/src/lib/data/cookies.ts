@@ -42,3 +42,7 @@ export const setCartId = (cartId: string) => {
 export const removeCartId = () => {
   cookies().set("_medusa_cart_id", "", { maxAge: -1 })
 }
+
+export const getLocale = () => {
+  return cookies().get("NEXT_LOCALE")?.value || "fr"
+}

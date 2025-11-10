@@ -1,6 +1,7 @@
 import { getCategoriesList } from "@lib/data/categories"
 import { getCollectionsList } from "@lib/data/collections"
 import { Text, clx } from "@medusajs/ui"
+import Image from "next/image"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
@@ -13,14 +14,21 @@ export default async function Footer() {
   return (
     <footer className="border-t border-ui-border-base w-full bg-gray-50/50">
       <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-8">
-          <div>
+        <div className="flex flex-col gap-y-1 xsmall:flex-row items-start justify-between py-4">
+          <div className="flex flex-col items-center gap-y-1">
             <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase font-bold"
             >
               Neobloby Store
             </LocalizedClientLink>
+            <Image
+              src="/images/Neobloby_Peche.png"
+              alt="NeoBloby Mascotte"
+              width={120}
+              height={120}
+              className="rounded-lg"
+            />
           </div>
           <div className="text-small-regular gap-8 md:gap-x-12 grid grid-cols-2 sm:grid-cols-3">
             {product_categories && product_categories?.length > 0 && (
@@ -118,7 +126,7 @@ export default async function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex w-full py-4 justify-between text-ui-fg-muted border-t border-gray-200">
+        <div className="flex w-full py-3 justify-between text-ui-fg-muted border-t border-gray-200">
           <Text className="txt-compact-small">
             © {new Date().getFullYear()} Neobloby Store. All rights reserved.
           </Text>

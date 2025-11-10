@@ -1,4 +1,7 @@
+"use client"
+
 import { Container } from "@medusajs/ui"
+import { useTranslation } from 'react-i18next'
 
 import ChevronDown from "@modules/common/icons/chevron-down"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
@@ -11,6 +14,8 @@ type OverviewProps = {
 }
 
 const Overview = ({ customer, orders }: OverviewProps) => {
+  const { t } = useTranslation()
+  
   return (
     <div data-testid="overview-page-wrapper">
       <div className="hidden small:block">

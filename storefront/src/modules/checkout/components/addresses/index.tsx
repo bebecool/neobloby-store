@@ -3,6 +3,7 @@
 import { CheckCircleSolid } from "@medusajs/icons"
 import { Heading, Text, useToggleState } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useTranslation } from 'react-i18next'
 
 import Divider from "@modules/common/components/divider"
 import Spinner from "@modules/common/icons/spinner"
@@ -19,10 +20,13 @@ import { SubmitButton } from "../submit-button"
 const Addresses = ({
   cart,
   customer,
+  countryCode,
 }: {
   cart: HttpTypes.StoreCart | null
   customer: HttpTypes.StoreCustomer | null
+  countryCode: string
 }) => {
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -58,19 +62,21 @@ const Addresses = ({
               className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
               data-testid="edit-address-button"
             >
-              Edit
+              {t('form.edit')}
             </button>
           </Text>
         )}
       </div>
       {isOpen ? (
         <form action={formAction}>
+          <input type="hidden" name="locale" value={i18n.language} />
           <div className="pb-8">
             <ShippingAddress
               customer={customer}
               checked={sameAsBilling}
               onChange={toggleSameAsBilling}
               cart={cart}
+              countryCode={countryCode}
             />
 
             {!sameAsBilling && (
@@ -79,14 +85,14 @@ const Addresses = ({
                   level="h2"
                   className="text-3xl-regular gap-x-4 pb-6 pt-8"
                 >
-                  Billing address
+                  {t('checkout.billingAddress')}
                 </Heading>
 
                 <BillingAddress cart={cart} />
               </div>
             )}
             <SubmitButton className="mt-6" data-testid="submit-address-button">
-              Continue to delivery
+              {t('checkout.continueToDelivery')}
             </SubmitButton>
             <ErrorMessage error={message} data-testid="address-error-message" />
           </div>

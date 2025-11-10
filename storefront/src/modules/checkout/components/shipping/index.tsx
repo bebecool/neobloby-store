@@ -3,6 +3,7 @@
 import { RadioGroup } from "@headlessui/react"
 import { CheckCircleSolid } from "@medusajs/icons"
 import { Button, Heading, Text, clx } from "@medusajs/ui"
+import { useTranslation } from 'react-i18next'
 
 import Divider from "@modules/common/components/divider"
 import Radio from "@modules/common/components/radio"
@@ -22,6 +23,7 @@ const Shipping: React.FC<ShippingProps> = ({
   cart,
   availableShippingMethods,
 }) => {
+  const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -87,7 +89,7 @@ const Shipping: React.FC<ShippingProps> = ({
                 className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
                 data-testid="edit-delivery-button"
               >
-                Edit
+                {t('form.edit')}
               </button>
             </Text>
           )}
@@ -141,7 +143,7 @@ const Shipping: React.FC<ShippingProps> = ({
             disabled={!cart.shipping_methods?.[0]}
             data-testid="submit-delivery-option-button"
           >
-            Continue to payment
+            {t('checkout.continueToPayment')}
           </Button>
         </div>
       ) : (

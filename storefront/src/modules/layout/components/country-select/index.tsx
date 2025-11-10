@@ -107,32 +107,32 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-150"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Listbox.Options className="absolute top-full mt-2 left-0 right-0 max-h-[320px] overflow-y-auto z-[10000] bg-white shadow-xl border border-gray-200 rounded-xl w-full">
-            {options?.map((o, index) => {
-              return (
-                <Listbox.Option
-                  key={index}
-                  value={o}
-                  className="py-3 px-4 hover:bg-gray-50 cursor-pointer flex items-center gap-3 transition-colors duration-150 border-b border-gray-100 last:border-0"
-                >
-                  <ReactCountryFlag
-                    svg
-                    style={{ width: "24px", height: "18px" }}
-                    className="rounded shadow-sm flex-shrink-0"
-                    countryCode={o?.country ?? ""}
-                  />
-                  <span className="text-sm text-gray-700 font-medium">{o?.label}</span>
-                </Listbox.Option>
-              )
-            })}
-          </Listbox.Options>
-          </Transition>
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Listbox.Options className="absolute top-full mt-2 left-0 right-0 max-h-[320px] overflow-y-auto z-[10000] bg-white shadow-xl border border-gray-200 rounded-xl w-full">
+                {options?.map((o, index) => {
+                  return (
+                    <Listbox.Option
+                      key={index}
+                      value={o}
+                      className="py-3 px-4 hover:bg-gray-50 cursor-pointer flex items-center gap-3 transition-colors duration-150 border-b border-gray-100 last:border-0"
+                    >
+                      <ReactCountryFlag
+                        svg
+                        style={{ width: "24px", height: "18px" }}
+                        className="rounded shadow-sm flex-shrink-0"
+                        countryCode={o?.country ?? ""}
+                      />
+                      <span className="text-sm text-gray-700 font-medium">{o?.label}</span>
+                    </Listbox.Option>
+                  )
+                })}
+              </Listbox.Options>
+            </Transition>
           </>
         )}
       </Listbox>

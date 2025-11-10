@@ -46,9 +46,11 @@ const medusaConfig = {
     vite: () => ({
       build: {
         rollupOptions: {
-          external: [
-            '@medusajs/draft-order/admin'
-          ]
+          external: (id) => {
+            // Externaliser les modules qui causent des erreurs de résolution
+            return id.includes('@medusajs/draft-order/admin') || 
+                   id.includes('@medusajs/admin-shared')
+          }
         }
       }
     })

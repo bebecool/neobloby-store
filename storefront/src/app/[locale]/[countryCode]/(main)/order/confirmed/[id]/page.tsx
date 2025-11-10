@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { cookies } from "next/headers"
 
 import OrderCompletedTemplate from "@modules/order/templates/order-completed-template"
 import { notFound } from "next/navigation"
@@ -36,5 +37,7 @@ export default async function OrderConfirmedPage({ params }: Props) {
     return notFound()
   }
 
-  return <OrderCompletedTemplate order={order} />
+  const isOnboarding = cookies().get("_medusa_onboarding")?.value === "true"
+
+  return <OrderCompletedTemplate order={order} isOnboarding={isOnboarding} locale={params.locale} />
 }

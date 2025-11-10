@@ -1,12 +1,20 @@
 import { HttpTypes } from "@medusajs/types"
-import { Text } from "@medusajs/ui"
+import { Heading, Text } from "@medusajs/ui"
 
 type OrderDetailsProps = {
   order: HttpTypes.StoreOrder
   showStatus?: boolean
+  locale: string
+  translations: {
+    thankYou: string
+    placedSuccessfully: string
+    confirmationSent: string
+    orderDate: string
+    orderNumber: string
+  }
 }
 
-const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
+const OrderDetails = ({ order, showStatus, translations }: OrderDetailsProps) => {
   const formatStatus = (str: string) => {
     const formatted = str.split("_").join(" ")
 
@@ -15,8 +23,15 @@ const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
 
   return (
     <div>
+      <Heading
+        level="h1"
+        className="flex flex-col gap-y-3 text-ui-fg-base text-3xl mb-4"
+      >
+        <span>{translations.thankYou}</span>
+        <span>{translations.placedSuccessfully}</span>
+      </Heading>
       <Text>
-        We have sent the order confirmation details to{" "}
+        {translations.confirmationSent}{" "}
         <span
           className="text-ui-fg-medium-plus font-semibold"
           data-testid="order-email"
@@ -26,13 +41,13 @@ const OrderDetails = ({ order, showStatus }: OrderDetailsProps) => {
         .
       </Text>
       <Text className="mt-2">
-        Order date:{" "}
+        {translations.orderDate}{" "}
         <span data-testid="order-date">
           {new Date(order.created_at).toDateString()}
         </span>
       </Text>
       <Text className="mt-2 text-ui-fg-interactive">
-        Order number: <span data-testid="order-id">{order.display_id}</span>
+        {translations.orderNumber} <span data-testid="order-id">{order.display_id}</span>
       </Text>
 
       <div className="flex items-center text-compact-small gap-x-4 mt-4">

@@ -1,23 +1,31 @@
-"use client"
-
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import { Heading, Text } from "@medusajs/ui"
-import { useTranslation } from 'react-i18next'
 
 import Divider from "@modules/common/components/divider"
 
 type ShippingDetailsProps = {
   order: HttpTypes.StoreOrder
+  translations?: {
+    delivery?: string
+    shippingAddress?: string
+    contact?: string
+    method?: string
+  }
 }
 
-const ShippingDetails = ({ order }: ShippingDetailsProps) => {
-  const { t } = useTranslation()
+const ShippingDetails = ({ order, translations }: ShippingDetailsProps) => {
+  const t = {
+    delivery: translations?.delivery || 'Livraison',
+    shippingAddress: translations?.shippingAddress || 'Adresse de livraison',
+    contact: translations?.contact || 'Contact',
+    method: translations?.method || 'Méthode',
+  }
   
   return (
     <div>
       <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
-        {t('order.delivery')}
+        {t.delivery}
       </Heading>
       <div className="flex items-start gap-x-8">
         <div
@@ -25,7 +33,7 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
           data-testid="shipping-address-summary"
         >
           <Text className="txt-medium-plus text-ui-fg-base mb-1">
-            {t('order.shippingAddress')}
+            {t.shippingAddress}
           </Text>
           <Text className="txt-medium text-ui-fg-subtle">
             {order.shipping_address?.first_name}{" "}
@@ -48,7 +56,7 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
           className="flex flex-col w-1/3 "
           data-testid="shipping-contact-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">{t('order.contact')}</Text>
+          <Text className="txt-medium-plus text-ui-fg-base mb-1">{t.contact}</Text>
           <Text className="txt-medium text-ui-fg-subtle">
             {order.shipping_address?.phone}
           </Text>
@@ -59,7 +67,7 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
           className="flex flex-col w-1/3"
           data-testid="shipping-method-summary"
         >
-          <Text className="txt-medium-plus text-ui-fg-base mb-1">{t('order.method')}</Text>
+          <Text className="txt-medium-plus text-ui-fg-base mb-1">{t.method}</Text>
           <Text className="txt-medium text-ui-fg-subtle">
             {(order as any).shipping_methods[0]?.name} (
             {convertToLocale({

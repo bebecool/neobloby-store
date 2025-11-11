@@ -5,6 +5,7 @@ import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
+import { useTranslation } from 'react-i18next'
 import ErrorMessage from "../error-message"
 import Spinner from "@modules/common/icons/spinner"
 import { placeOrder } from "@lib/data/cart"
@@ -20,6 +21,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
 }) => {
+  const { t } = useTranslation()
   const notReady =
     !cart ||
     !cart.shipping_address ||
@@ -59,11 +61,12 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return <Button disabled>{t('checkout.selectPaymentMethod')}</Button>
   }
 }
 
 const GiftCardPaymentButton = () => {
+  const { t } = useTranslation()
   const [submitting, setSubmitting] = useState(false)
 
   const handleOrder = async () => {
@@ -77,7 +80,7 @@ const GiftCardPaymentButton = () => {
       isLoading={submitting}
       data-testid="submit-order-button"
     >
-      Place order
+      {t('checkout.placeOrder')}
     </Button>
   )
 }
@@ -91,6 +94,7 @@ const StripePaymentButton = ({
   notReady: boolean
   "data-testid"?: string
 }) => {
+  const { t } = useTranslation()
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -179,7 +183,7 @@ const StripePaymentButton = ({
         isLoading={submitting}
         data-testid={dataTestId}
       >
-        Place order
+        {t('checkout.placeOrder')}
       </Button>
       <ErrorMessage
         error={errorMessage}
@@ -260,6 +264,7 @@ const PayPalPaymentButton = ({
 }
 
 const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+  const { t } = useTranslation()
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -288,7 +293,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         size="large"
         data-testid="submit-order-button"
       >
-        Place order
+        {t('checkout.placeOrder')}
       </Button>
       <ErrorMessage
         error={errorMessage}

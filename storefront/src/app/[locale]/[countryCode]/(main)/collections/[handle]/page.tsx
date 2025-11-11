@@ -21,46 +21,40 @@ type Props = {
 export const PRODUCT_LIMIT = 12
 
 export async function generateStaticParams() {
-  try {
-    const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
-    const { collections } = await getCollectionsList()
+  const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
+  const { collections } = await getCollectionsList()
 
-    if (!collections) {
-      return []
-    }
-
-    const countryCodes = await listRegions().then(
-      (regions: StoreRegion[]) =>
-        regions
-          ?.map((r) => r.countries?.map((c) => c.iso_2))
-          .flat()
-          .filter(Boolean) as string[]
-    )
-
-    const collectionHandles = collections.map(
-      (collection: StoreCollection) => collection.handle
-    )
-
-    const staticParams = locales
-      .map((locale) =>
-        countryCodes
-          ?.map((countryCode: string) =>
-            collectionHandles.map((handle: string | undefined) => ({
-              locale,
-              countryCode,
-              handle,
-            }))
-          )
-          .flat()
-      )
-      .flat()
-
-    return staticParams
-  } catch (error) {
-    console.error('Error generating static params for collections:', error)
-    // Return empty array to allow build to continue - pages will be generated on-demand
+  if (!collections) {
     return []
   }
+
+  const countryCodes = await listRegions().then(
+    (regions: StoreRegion[]) =>
+      regions
+        ?.map((r) => r.countries?.map((c) => c.iso_2))
+        .flat()
+        .filter(Boolean) as string[]
+  )
+
+  const collectionHandles = collections.map(
+    (collection: StoreCollection) => collection.handle
+  )
+
+  const staticParams = locales
+    .map((locale) =>
+      countryCodes
+        ?.map((countryCode: string) =>
+          collectionHandles.map((handle: string | undefined) => ({
+            locale,
+            countryCode,
+            handle,
+          }))
+        )
+        .flat()
+    )
+    .flat()
+
+  return staticParams
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

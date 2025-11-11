@@ -10,48 +10,42 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  try {
-    const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
-    const countryCodes = await listRegions().then(
-      (regions) =>
-        regions
-          ?.map((r) => r.countries?.map((c) => c.iso_2))
-          .flat()
-          .filter(Boolean) as string[]
-    )
+  const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
+  const countryCodes = await listRegions().then(
+    (regions) =>
+      regions
+        ?.map((r) => r.countries?.map((c) => c.iso_2))
+        .flat()
+        .filter(Boolean) as string[]
+  )
 
-    if (!countryCodes) {
-      return []
-    }
-
-    const products = await Promise.all(
-      countryCodes.map((countryCode) => {
-        return getProductsList({ countryCode }).catch(() => ({ response: { products: [], count: 0 }, nextPage: null }))
-      })
-    ).then((responses) =>
-      responses.map(({ response }) => response.products).flat()
-    )
-
-    const staticParams = locales
-      .map((locale) =>
-        countryCodes
-          ?.map((countryCode) =>
-            products.map((product) => ({
-              locale,
-              countryCode,
-              handle: product.handle,
-            }))
-          )
-          .flat()
-      )
-      .flat()
-
-    return staticParams
-  } catch (error) {
-    console.error('Error generating static params for products:', error)
-    // Return empty array to allow build to continue - pages will be generated on-demand
-    return []
+  if (!countryCodes) {
+    return null
   }
+
+  const products = await Promise.all(
+    countryCodes.map((countryCode) => {
+      return getProductsList({ countryCode })
+    })
+  ).then((responses) =>
+    responses.map(({ response }) => response.products).flat()
+  )
+
+  const staticParams = locales
+    .map((locale) =>
+      countryCodes
+        ?.map((countryCode) =>
+          products.map((product) => ({
+            locale,
+            countryCode,
+            handle: product.handle,
+          }))
+        )
+        .flat()
+    )
+    .flat()
+
+  return staticParams
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

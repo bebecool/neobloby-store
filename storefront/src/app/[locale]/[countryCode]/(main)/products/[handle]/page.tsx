@@ -9,44 +9,48 @@ type Props = {
   params: { locale: string; countryCode: string; handle: string }
 }
 
-export async function generateStaticParams() {
-  const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
-  const countryCodes = await listRegions().then(
-    (regions) =>
-      regions
-        ?.map((r) => r.countries?.map((c) => c.iso_2))
-        .flat()
-        .filter(Boolean) as string[]
-  )
+// Disable static generation during build to avoid backend dependency
+export const dynamicParams = true
+export const dynamic = 'force-dynamic'
 
-  if (!countryCodes) {
-    return null
-  }
+// export async function generateStaticParams() {
+//   const locales = ['fr', 'en', 'de', 'es', 'it', 'nl']
+//   const countryCodes = await listRegions().then(
+//     (regions) =>
+//       regions
+//         ?.map((r) => r.countries?.map((c) => c.iso_2))
+//         .flat()
+//         .filter(Boolean) as string[]
+//   )
 
-  const products = await Promise.all(
-    countryCodes.map((countryCode) => {
-      return getProductsList({ countryCode })
-    })
-  ).then((responses) =>
-    responses.map(({ response }) => response.products).flat()
-  )
+//   if (!countryCodes) {
+//     return null
+//   }
 
-  const staticParams = locales
-    .map((locale) =>
-      countryCodes
-        ?.map((countryCode) =>
-          products.map((product) => ({
-            locale,
-            countryCode,
-            handle: product.handle,
-          }))
-        )
-        .flat()
-    )
-    .flat()
+//   const products = await Promise.all(
+//     countryCodes.map((countryCode) => {
+//       return getProductsList({ countryCode })
+//     })
+//   ).then((responses) =>
+//     responses.map(({ response }) => response.products).flat()
+//   )
 
-  return staticParams
-}
+//   const staticParams = locales
+//     .map((locale) =>
+//       countryCodes
+//         ?.map((countryCode) =>
+//           products.map((product) => ({
+//             locale,
+//             countryCode,
+//             handle: product.handle,
+//           }))
+//         )
+//         .flat()
+//     )
+//     .flat()
+
+//   return staticParams
+// }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = params

@@ -23,7 +23,9 @@
     "checkJs": false
   },
   "ts-node": {
-    "swc": true
+    "swc": true,
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "include": ["src", "medusa-config.js"],
   "exclude": [

@@ -14,9 +14,20 @@ Video instructions: https://youtu.be/PPxenu7IjGM
 - **MinIO storage** (Automatic setup when using the Railway template) - fallback to local storage.
 - **Meilisearch** (Automatic setup when using the Railway template)
 
+### payment providers
+- **Stripe** - Credit card payments ([Setup video](https://youtu.be/dcSOpIzc1Og))
+- **Solana** - Cryptocurrency payments ([Documentation](src/modules/solana-payment/README.md))
+
 ### commands
 
 `cd backend/`
 `npm run ib` or `pnpm ib` will initialize the backend by running migrations and seed the database with required system data.
 `npm run dev` or `pnpm dev` will start the backend (and admin dashboard frontend on `localhost:9000/app`) in development mode.
 `pnpm build && pnpm start` will compile the project and run from compiled source. This can be useful for reproducing issues on your cloud instance.
+
+### generating solana mnemonic
+
+To generate a secure BIP39 mnemonic phrase for Solana payments:
+```bash
+node src/scripts/generate-solana-mnemonic.js
+```

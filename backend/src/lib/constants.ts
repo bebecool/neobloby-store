@@ -91,6 +91,15 @@ export const MEILISEARCH_HOST = process.env.MEILISEARCH_HOST;
 export const MEILISEARCH_ADMIN_KEY = process.env.MEILISEARCH_ADMIN_KEY;
 
 /**
+ * (optional) Solana payment configuration
+ */
+export const SOLANA_MNEMONIC = process.env.SOLANA_MNEMONIC;
+export const SOLANA_COLD_STORAGE_WALLET = process.env.SOLANA_COLD_STORAGE_WALLET;
+export const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
+export const SOLANA_SESSION_EXPIRATION = parseInt(process.env.SOLANA_SESSION_EXPIRATION || '600', 10); // 10 minutes par défaut
+export const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY;
+
+/**
  * Worker mode
  */
 export const WORKER_MODE =

@@ -21,7 +21,12 @@ import {
   MINIO_SECRET_KEY,
   MINIO_BUCKET,
   MEILISEARCH_HOST,
-  MEILISEARCH_ADMIN_KEY
+  MEILISEARCH_ADMIN_KEY,
+  SOLANA_MNEMONIC,
+  SOLANA_COLD_STORAGE_WALLET,
+  SOLANA_RPC_URL,
+  SOLANA_SESSION_EXPIRATION,
+  COINGECKO_API_KEY
 } from 'lib/constants';
 
 loadEnv(process.env.NODE_ENV, process.cwd());
@@ -125,6 +130,22 @@ const medusaConfig = {
               webhookSecret: STRIPE_WEBHOOK_SECRET,
             },
           },
+          ...(SOLANA_MNEMONIC && SOLANA_COLD_STORAGE_WALLET ? [{
+            resolve: 'medusa-payment-solana',
+            id: 'solana',
+            options: {
+              passPhrase: SOLANA_MNEMONIC,
+              coldStorageWallet: SOLANA_COLD_STORAGE_WALLET,
+              rpcUrl: SOLANA_RPC_URL,
+              sessionExpirationSeconds: SOLANA_SESSION_EXPIRATION,
+              ...(COINGECKO_API_KEY ? {
+                currencyConverter: {
+                  provider: 'coingecko',
+                  apiKey: COINGECKO_API_KEY,
+                }
+              } : {})
+            },
+          }] : []),
         ],
       },
     }] : [])

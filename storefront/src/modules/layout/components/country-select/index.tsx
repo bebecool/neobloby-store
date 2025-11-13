@@ -77,7 +77,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
       <Listbox
         as="span"
         onChange={handleChange}
-        value={current}
+        value={current || undefined}
       >
         {({ open }) => (
           <>

@@ -12,10 +12,11 @@ export const metadata: Metadata = {
 }
 
 export default async function Home({
-  params: { countryCode },
+  params,
 }: {
-  params: { locale: string; countryCode: string }
+  params: Promise<{ locale: string; countryCode: string }>
 }) {
+  const { countryCode } = await params
   const collections = await getCollectionsWithProducts(countryCode)
   const region = await getRegion(countryCode)
 

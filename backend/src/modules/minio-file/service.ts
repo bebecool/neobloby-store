@@ -49,10 +49,30 @@ class MinioFileProviderService extends AbstractFileProviderService {
     this.bucket = this.config_.bucket || DEFAULT_BUCKET
     this.logger_.info(`MinIO service initialized with bucket: ${this.bucket}`)
 
+    // Parser l'endpoint pour extraire le protocole, host et port
+    let endPoint = this.config_.endPoint
+    let port = 9000
+    let useSSL = false
+
+    // Si l'endpoint contient un protocole (http:// ou https://)
+    if (endPoint.includes('://')) {
+      const url = new URL(endPoint.startsWith('http') ? endPoint : `http://${endPoint}`)
+      endPoint = url.hostname
+      port = url.port ? parseInt(url.port) : (url.protocol === 'https:' ? 443 : 9000)
+      useSSL = url.protocol === 'https:'
+    } else if (endPoint.includes(':')) {
+      // Si l'endpoint contient un port (ex: bucket.railway.internal:9000)
+      const parts = endPoint.split(':')
+      endPoint = parts[0]
+      port = parseInt(parts[1])
+    }
+
+    this.logger_.info(`MinIO client config: endPoint=${endPoint}, port=${port}, useSSL=${useSSL}`)
+
     this.client = new Client({
-      endPoint: this.config_.endPoint,
-      port: 9000,        // interne Railway
-      useSSL: false,     // Railway MinIO tourne en HTTP
+      endPoint,
+      port,
+      useSSL,
       accessKey: this.config_.accessKey,
       secretKey: this.config_.secretKey
     })

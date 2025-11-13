@@ -1,22 +1,31 @@
-import type {
-  MedusaRequest,
-  MedusaResponse,
-  MedusaNextFunction,
-} from "@medusajs/framework/http"
+import type { MiddlewaresConfig } from "@medusajs/medusa"
 
-export async function middleware(
-  req: MedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) {
-  const logger = req.scope.resolve("logger")
-  
-  // Log toutes les requêtes DELETE vers l'admin
-  if (req.method === "DELETE" && req.url.includes("/admin/")) {
-    logger.warn(`[DELETE REQUEST INTERCEPTED] ${req.method} ${req.url}`)
-    logger.warn(`[DELETE REQUEST INTERCEPTED] Params: ${JSON.stringify(req.params)}`)
-    logger.warn(`[DELETE REQUEST INTERCEPTED] Query: ${JSON.stringify(req.query)}`)
-  }
-  
-  next()
+export const config: MiddlewaresConfig = {
+  routes: [
+    {
+      matcher: "/admin/*",
+      middlewares: [
+        (req, res, next) => {
+          // Récupérer le logger depuis le scope
+          const logger = req.scope.resolve("logger")
+          
+          // Log ALL DELETE requests to admin endpoints
+          if (req.method === "DELETE") {
+            logger.warn("=================================================")
+            logger.warn("🔴 DELETE REQUEST INTERCEPTED")
+            logger.warn(`Method: ${req.method}`)
+            logger.warn(`URL: ${req.url}`)
+            logger.warn(`Path: ${req.path}`)
+            logger.warn(`Base URL: ${req.baseUrl}`)
+            logger.warn(`Original URL: ${req.originalUrl}`)
+            logger.warn(`Params: ${JSON.stringify(req.params)}`)
+            logger.warn(`Query: ${JSON.stringify(req.query)}`)
+            logger.warn("=================================================")
+          }
+          
+          next()
+        },
+      ],
+    },
+  ],
 }

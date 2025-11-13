@@ -83,12 +83,19 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     notFound()
   }
 
+  // Ajout du suspense boundary pour Next.js 16
+  // On importe Suspense de React
+  // ...existing code...
+  const React = await import("react")
+
   return (
-    <CollectionTemplate
-      collection={collection}
-      page={page}
-      sortBy={sortBy}
-      countryCode={params.countryCode}
-    />
+    <React.Suspense fallback={<div>Chargement...</div>}>
+      <CollectionTemplate
+        collection={collection}
+        page={page}
+        sortBy={sortBy}
+        countryCode={params.countryCode}
+      />
+    </React.Suspense>
   )
 }

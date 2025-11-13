@@ -11,7 +11,27 @@ MINIO_ENDPOINT=your-minio-endpoint
 MINIO_ACCESS_KEY=your-access-key
 MINIO_SECRET_KEY=your-secret-key
 MINIO_BUCKET=your-bucket-name  # Optional, defaults to 'medusa-media'
+MINIO_PUBLIC_URL=https://your-public-minio-url  # Optional but REQUIRED for Railway/production
 ```
+
+### Railway Configuration
+
+**IMPORTANT**: On Railway Metal, MinIO uses an internal domain (e.g., `minio.railway.internal:9000`) that is NOT accessible from the browser. You MUST set `MINIO_PUBLIC_URL` to the public MinIO URL.
+
+Example Railway configuration:
+```env
+MINIO_ENDPOINT=minio.railway.internal:9000  # Internal endpoint for S3 API
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=your-secret-key
+MINIO_BUCKET=medusa-media
+MINIO_PUBLIC_URL=https://your-minio-service.railway.app  # PUBLIC URL for file access
+```
+
+To get the public URL:
+1. Go to your MinIO service in Railway
+2. Click on "Settings" → "Networking"
+3. Generate a public domain or use the provided Railway domain
+4. Add this URL as `MINIO_PUBLIC_URL` in your backend service
 
 ## Features
 

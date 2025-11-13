@@ -20,6 +20,7 @@ import {
   MINIO_ACCESS_KEY,
   MINIO_SECRET_KEY,
   MINIO_BUCKET,
+  MINIO_PUBLIC_URL,
   MEILISEARCH_HOST,
   MEILISEARCH_ADMIN_KEY,
   SOLANA_MNEMONIC,
@@ -62,7 +63,8 @@ const medusaConfig = {
               endPoint: MINIO_ENDPOINT,
               accessKey: MINIO_ACCESS_KEY,
               secretKey: MINIO_SECRET_KEY,
-              bucket: MINIO_BUCKET // Optional, default: medusa-media
+              bucket: MINIO_BUCKET, // Optional, default: medusa-media
+              publicUrl: MINIO_PUBLIC_URL // Optional, public URL for accessing files
             }
           }] : [{
             resolve: '@medusajs/file-local',

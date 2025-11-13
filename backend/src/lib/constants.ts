@@ -65,6 +65,7 @@ export const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT;
 export const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY;
 export const MINIO_SECRET_KEY = process.env.MINIO_SECRET_KEY;
 export const MINIO_BUCKET = process.env.MINIO_BUCKET; // Optional, if not set bucket will be called: medusa-media
+export const MINIO_PUBLIC_URL = process.env.MINIO_PUBLIC_URL; // Optional, public URL for accessing files
 
 /**
  * (optional) Resend API Key and from Email - do not set if using SendGrid

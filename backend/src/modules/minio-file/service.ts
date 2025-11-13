@@ -146,11 +146,23 @@ class MinioFileProviderService extends AbstractFileProviderService {
         }
       )
 
-      // ✅ Utiliser publicUrl si dispo
-      const baseUrl = this.config_.publicUrl || `https://${this.config_.endPoint}`
-      const url = `${baseUrl}/${this.bucket}/${fileKey}`
+      // Générer l'URL publique du fichier
+      let url: string
+      if (this.config_.publicUrl) {
+        // Si publicUrl est fourni, l'utiliser directement
+        const baseUrl = this.config_.publicUrl.endsWith('/') 
+          ? this.config_.publicUrl.slice(0, -1) 
+          : this.config_.publicUrl
+        url = `${baseUrl}/${this.bucket}/${fileKey}`
+      } else {
+        // Sinon, construire l'URL à partir de l'endpoint
+        const protocol = this.config_.endPoint.includes('localhost') || this.config_.endPoint.includes('127.0.0.1') 
+          ? 'http' 
+          : 'https'
+        url = `${protocol}://${this.config_.endPoint}/${this.bucket}/${fileKey}`
+      }
 
-      this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}`)
+      this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}, URL: ${url}`)
 
       return { url, key: fileKey }
     } catch (error) {

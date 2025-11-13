@@ -153,86 +153,27 @@ class MinioFileProviderService extends AbstractFileProviderService {
       const parsedFilename = path.parse(file.filename)
       const fileKey = `${parsedFilename.name}-${ulid()}${parsedFilename.ext}`
       
-      // LOG DÉTAILLÉ : Type et structure du contenu
-      this.logger_.info(`=== UPLOAD DEBUG ===`)
-      this.logger_.info(`Filename: ${file.filename}`)
-      this.logger_.info(`Content type: ${typeof file.content}`)
-      this.logger_.info(`Is Buffer: ${Buffer.isBuffer(file.content)}`)
-      this.logger_.info(`Is Array: ${Array.isArray(file.content)}`)
-      this.logger_.info(`Constructor: ${file.content?.constructor?.name}`)
-      if (file.content && typeof file.content === 'object') {
-        this.logger_.info(`Object keys: ${Object.keys(file.content).slice(0, 10).join(', ')}`)
-        this.logger_.info(`Content length/size: ${(file.content as any).length || (file.content as any).size || 'unknown'}`)
-      }
-      
-      // Log first bytes if it's a string to detect format
-      if (typeof file.content === 'string') {
-        this.logger_.info(`String length: ${file.content.length}`)
-        
-        // Check first bytes as hex to identify file format
-        const first20Bytes = file.content.substring(0, 20).split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ')
-        this.logger_.info(`First 20 bytes (hex): ${first20Bytes}`)
-        
-        // Detect file signature
-        const hexStr = file.content.substring(0, 4).split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
-        this.logger_.info(`File signature: ${hexStr}`)
-        
-        // JPG starts with FF D8 FF
-        // PNG starts with 89 50 4E 47
-        const isJPG = hexStr.startsWith('ffd8ff')
-        const isPNG = hexStr.startsWith('89504e47')
-        this.logger_.info(`Detected format - JPG: ${isJPG}, PNG: ${isPNG}`)
-        
-        // Check if contains non-printable chars (binary data)
-        const hasBinaryChars = file.content.substring(0, 100).split('').some(c => {
-          const code = c.charCodeAt(0)
-          return code < 32 && code !== 9 && code !== 10 && code !== 13
-        })
-        this.logger_.info(`Contains binary characters: ${hasBinaryChars}`)
-      }
-      
-      this.logger_.info(`===================`)
-      
-      // Gérer différents types de contenu
+      // Handle different content types
       let content: Buffer
       const fileContent = file.content as any
       
       if (Buffer.isBuffer(file.content)) {
-        // Déjà un Buffer, l'utiliser directement
         content = file.content
-        this.logger_.debug(`File content is already a Buffer (${content.length} bytes)`)
       } else if (fileContent?.pipe && typeof fileContent.pipe === 'function') {
-        // Si c'est un stream (vérifié par la présence de .pipe)
+        // Stream content
         const chunks: Buffer[] = []
         for await (const chunk of fileContent) {
           chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
         }
         content = Buffer.concat(chunks)
-        this.logger_.debug(`Converted stream to Buffer (${content.length} bytes)`)
       } else if (typeof file.content === 'string') {
         // Medusa v2 sends file content as BASE64-encoded string
-        // The signature /9j/ confirms base64 encoding (JPEG base64 starts with /9j/)
         content = Buffer.from(file.content, 'base64')
-        this.logger_.info(`Converted base64 string to Buffer (${content.length} bytes)`)
-        
-        // Verify conversion by checking file signature
-        const signature = content.slice(0, 4).toString('hex')
-        this.logger_.info(`Buffer signature after conversion: ${signature}`)
-        
-        // JPG should be FF D8 FF Ex, PNG should be 89 50 4E 47
-        const isValidJPG = signature.startsWith('ffd8ff')
-        const isValidPNG = signature.startsWith('89504e47')
-        this.logger_.info(`Valid format - JPG: ${isValidJPG}, PNG: ${isValidPNG}`)
       } else if (fileContent instanceof ArrayBuffer) {
-        // Si c'est un ArrayBuffer
         content = Buffer.from(new Uint8Array(fileContent))
-        this.logger_.debug(`Converted ArrayBuffer to Buffer (${content.length} bytes)`)
       } else if (ArrayBuffer.isView(fileContent)) {
-        // Si c'est un TypedArray (Uint8Array, etc.)
         content = Buffer.from(fileContent.buffer, fileContent.byteOffset, fileContent.byteLength)
-        this.logger_.debug(`Converted TypedArray to Buffer (${content.length} bytes)`)
       } else {
-        this.logger_.error(`Unknown content type: ${typeof file.content}`)
         throw new MedusaError(MedusaError.Types.INVALID_DATA, `Invalid file content type: ${typeof file.content}`)
       }
 
@@ -248,23 +189,21 @@ class MinioFileProviderService extends AbstractFileProviderService {
         }
       )
 
-      // Générer l'URL publique du fichier
+      // Generate public URL
       let url: string
       if (this.config_.publicUrl) {
-        // Si publicUrl est fourni, l'utiliser directement
         const baseUrl = this.config_.publicUrl.endsWith('/') 
           ? this.config_.publicUrl.slice(0, -1) 
           : this.config_.publicUrl
         url = `${baseUrl}/${this.bucket}/${fileKey}`
       } else {
-        // Sinon, construire l'URL à partir de l'endpoint
         const protocol = this.config_.endPoint.includes('localhost') || this.config_.endPoint.includes('127.0.0.1') 
           ? 'http' 
           : 'https'
         url = `${protocol}://${this.config_.endPoint}/${this.bucket}/${fileKey}`
       }
 
-      this.logger_.info(`Successfully uploaded file ${fileKey} to MinIO bucket ${this.bucket}, URL: ${url}`)
+      this.logger_.info(`Uploaded file: ${fileKey}`)
 
       return { url, key: fileKey }
     } catch (error) {

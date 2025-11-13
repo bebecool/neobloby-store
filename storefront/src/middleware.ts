@@ -20,7 +20,7 @@ async function getRegionMap() {
     regionMapUpdated < Date.now() - 3600 * 1000
   ) {
     // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
-    const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
+    const response = await fetch(`${BACKEND_URL}/store/regions`, {
       headers: {
         "x-publishable-api-key": PUBLISHABLE_API_KEY!,
       },
@@ -28,7 +28,20 @@ async function getRegionMap() {
         revalidate: 3600,
         tags: ["regions"],
       },
-    }).then((res) => res.json())
+    })
+
+    // Check if the response is OK before parsing JSON
+    if (!response.ok) {
+      console.error(
+        `Failed to fetch regions: ${response.status} ${response.statusText}`
+      )
+      // Return a fallback region map to prevent middleware from crashing
+      regionMapCache.regionMap.set(DEFAULT_REGION, { id: DEFAULT_REGION } as HttpTypes.StoreRegion)
+      regionMapCache.regionMapUpdated = Date.now()
+      return regionMapCache.regionMap
+    }
+
+    const { regions } = await response.json()
 
     if (!regions?.length) {
       notFound()

@@ -152,7 +152,33 @@ class MinioFileProviderService extends AbstractFileProviderService {
     try {
       const parsedFilename = path.parse(file.filename)
       const fileKey = `${parsedFilename.name}-${ulid()}${parsedFilename.ext}`
-      const content = Buffer.from(file.content, 'binary')
+      
+      // Gérer différents types de contenu
+      let content: Buffer
+      if (Buffer.isBuffer(file.content)) {
+        // Déjà un Buffer, l'utiliser directement
+        content = file.content
+        this.logger_.debug(`File content is already a Buffer (${content.length} bytes)`)
+      } else if (file.content instanceof Readable) {
+        // Si c'est un stream, le convertir en Buffer
+        const chunks: Buffer[] = []
+        for await (const chunk of file.content) {
+          chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+        }
+        content = Buffer.concat(chunks)
+        this.logger_.debug(`Converted stream to Buffer (${content.length} bytes)`)
+      } else if (typeof file.content === 'string') {
+        // Si c'est une string, l'utiliser directement comme Buffer
+        content = Buffer.from(file.content, 'utf-8')
+        this.logger_.debug(`Converted string to Buffer (${content.length} bytes)`)
+      } else if (file.content instanceof ArrayBuffer || ArrayBuffer.isView(file.content)) {
+        // Si c'est un ArrayBuffer ou TypedArray
+        content = Buffer.from(file.content as any)
+        this.logger_.debug(`Converted ArrayBuffer to Buffer (${content.length} bytes)`)
+      } else {
+        this.logger_.error(`Unknown content type: ${typeof file.content}`)
+        throw new MedusaError(MedusaError.Types.INVALID_DATA, `Invalid file content type: ${typeof file.content}`)
+      }
 
       await this.client.putObject(
         this.bucket,

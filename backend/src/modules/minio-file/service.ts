@@ -218,6 +218,18 @@ class MinioFileProviderService extends AbstractFileProviderService {
       throw new MedusaError(MedusaError.Types.INVALID_DATA, 'No file key provided')
     }
     try {
+      // Si publicUrl est configuré, retourner l'URL publique directe
+      // au lieu d'une URL pré-signée (qui pointe vers l'endpoint interne)
+      if (this.config_.publicUrl) {
+        const baseUrl = this.config_.publicUrl.endsWith('/') 
+          ? this.config_.publicUrl.slice(0, -1) 
+          : this.config_.publicUrl
+        const publicUrl = `${baseUrl}/${this.bucket}/${fileData.fileKey}`
+        this.logger_.info(`Using public URL for file ${fileData.fileKey}: ${publicUrl}`)
+        return publicUrl
+      }
+
+      // Fallback : générer une URL pré-signée (pour environnements sans URL publique)
       const url = await this.client.presignedGetObject(
         this.bucket,
         fileData.fileKey,
@@ -226,10 +238,10 @@ class MinioFileProviderService extends AbstractFileProviderService {
       this.logger_.info(`Generated presigned URL for file ${fileData.fileKey}`)
       return url
     } catch (error) {
-      this.logger_.error(`Failed to generate presigned URL: ${error.message}`)
+      this.logger_.error(`Failed to generate URL: ${error.message}`)
       throw new MedusaError(
         MedusaError.Types.UNEXPECTED_STATE,
-        `Failed to generate presigned URL: ${error.message}`
+        `Failed to generate URL: ${error.message}`
       )
     }
   }

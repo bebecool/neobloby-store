@@ -10,8 +10,9 @@
   "scripts": {
     "wait": "await-backend",
     "launcher": "launch-storefront",
+    "clean": "node clean-cache.js",
     "dev": "npm run launcher dev",
-    "build": "npm run launcher build",
+    "build": "npm run clean && npm run launcher build",
     "start": "npm run launcher start",
     "build:next": "next build",
     "lint": "next lint",

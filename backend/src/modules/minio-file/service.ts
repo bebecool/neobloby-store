@@ -155,14 +155,16 @@ class MinioFileProviderService extends AbstractFileProviderService {
       
       // Gérer différents types de contenu
       let content: Buffer
+      const fileContent = file.content as any
+      
       if (Buffer.isBuffer(file.content)) {
         // Déjà un Buffer, l'utiliser directement
         content = file.content
         this.logger_.debug(`File content is already a Buffer (${content.length} bytes)`)
-      } else if (file.content instanceof Readable) {
-        // Si c'est un stream, le convertir en Buffer
+      } else if (fileContent?.pipe && typeof fileContent.pipe === 'function') {
+        // Si c'est un stream (vérifié par la présence de .pipe)
         const chunks: Buffer[] = []
-        for await (const chunk of file.content) {
+        for await (const chunk of fileContent) {
           chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
         }
         content = Buffer.concat(chunks)
@@ -171,10 +173,14 @@ class MinioFileProviderService extends AbstractFileProviderService {
         // Si c'est une string, l'utiliser directement comme Buffer
         content = Buffer.from(file.content, 'utf-8')
         this.logger_.debug(`Converted string to Buffer (${content.length} bytes)`)
-      } else if (file.content instanceof ArrayBuffer || ArrayBuffer.isView(file.content)) {
-        // Si c'est un ArrayBuffer ou TypedArray
-        content = Buffer.from(file.content as any)
+      } else if (fileContent instanceof ArrayBuffer) {
+        // Si c'est un ArrayBuffer
+        content = Buffer.from(new Uint8Array(fileContent))
         this.logger_.debug(`Converted ArrayBuffer to Buffer (${content.length} bytes)`)
+      } else if (ArrayBuffer.isView(fileContent)) {
+        // Si c'est un TypedArray (Uint8Array, etc.)
+        content = Buffer.from(fileContent.buffer, fileContent.byteOffset, fileContent.byteLength)
+        this.logger_.debug(`Converted TypedArray to Buffer (${content.length} bytes)`)
       } else {
         this.logger_.error(`Unknown content type: ${typeof file.content}`)
         throw new MedusaError(MedusaError.Types.INVALID_DATA, `Invalid file content type: ${typeof file.content}`)

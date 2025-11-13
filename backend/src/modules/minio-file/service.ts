@@ -153,6 +153,19 @@ class MinioFileProviderService extends AbstractFileProviderService {
       const parsedFilename = path.parse(file.filename)
       const fileKey = `${parsedFilename.name}-${ulid()}${parsedFilename.ext}`
       
+      // LOG DÉTAILLÉ : Type et structure du contenu
+      this.logger_.info(`=== UPLOAD DEBUG ===`)
+      this.logger_.info(`Filename: ${file.filename}`)
+      this.logger_.info(`Content type: ${typeof file.content}`)
+      this.logger_.info(`Is Buffer: ${Buffer.isBuffer(file.content)}`)
+      this.logger_.info(`Is Array: ${Array.isArray(file.content)}`)
+      this.logger_.info(`Constructor: ${file.content?.constructor?.name}`)
+      if (file.content && typeof file.content === 'object') {
+        this.logger_.info(`Object keys: ${Object.keys(file.content).slice(0, 10).join(', ')}`)
+        this.logger_.info(`Content length/size: ${(file.content as any).length || (file.content as any).size || 'unknown'}`)
+      }
+      this.logger_.info(`===================`)
+      
       // Gérer différents types de contenu
       let content: Buffer
       const fileContent = file.content as any

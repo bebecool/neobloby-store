@@ -1,6 +1,6 @@
 import { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
 import { IFileModuleService } from "@medusajs/framework/types"
-import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { Modules, ContainerRegistrationKeys, remoteQueryObjectFromString } from "@medusajs/framework/utils"
 
 // In-memory cache to store product media before updates
 // Structure: { productId: [imageUrl1, imageUrl2, ...] }

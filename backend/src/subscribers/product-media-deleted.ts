@@ -33,9 +33,6 @@ export default async function handleProductMediaDeleted({
     accessKey: MINIO_CONFIG.accessKey,
     secretKey: MINIO_CONFIG.secretKey
   })
-  
-  logger.warn("🎯 ========== PRODUCT.UPDATED EVENT RECEIVED ==========")
-  logger.warn(`🎯 Product ID: ${data.id}`)
 
   try {
     // Get the current product data with images
@@ -48,25 +45,19 @@ export default async function handleProductMediaDeleted({
     const [product] = await remoteQuery(queryObject)
     
     if (!product) {
-      logger.warn(`🎯 Product not found: ${data.id}`)
       return
     }
 
     // Extract current image URLs
     const currentImages = (product.images || []).map((img: any) => img.url)
-    logger.warn(`🎯 Current images: ${JSON.stringify(currentImages, null, 2)}`)
 
     // Get cached images from before the update
     const previousImages = productMediaCache.get(data.id) || []
-    logger.warn(`🎯 Previous images (cached): ${JSON.stringify(previousImages, null, 2)}`)
 
     // Find deleted images (in previous but not in current)
     const deletedImages = previousImages.filter(url => !currentImages.includes(url))
     
     if (deletedImages.length > 0) {
-      logger.warn(`🔥 IMAGES DELETED: ${deletedImages.length} image(s)`)
-      logger.warn(`🔥 Deleted image URLs: ${JSON.stringify(deletedImages, null, 2)}`)
-
       // Delete each image from MinIO
       for (const imageUrl of deletedImages) {
         try {
@@ -75,36 +66,25 @@ export default async function handleProductMediaDeleted({
           const filename = imageUrl.split('/').pop()
           
           if (!filename) {
-            logger.warn(`🔥 Could not extract filename from URL: ${imageUrl}`)
+            logger.warn(`Failed to extract filename from URL: ${imageUrl}`)
             continue
           }
 
-          logger.warn(`🔥 Deleting from MinIO: ${filename}`)
-
           // Delete directly from MinIO using the MinIO client
-          try {
-            await minioClient.removeObject(MINIO_CONFIG.bucket, filename)
-            logger.warn(`✅ Successfully deleted from MinIO: ${filename}`)
-          } catch (deleteError) {
-            logger.error(`🔥 Error during MinIO deletion:`)
-            logger.error(deleteError)
-          }
+          await minioClient.removeObject(MINIO_CONFIG.bucket, filename)
+          logger.info(`✅ Deleted image from MinIO: ${filename}`)
 
         } catch (error) {
-          logger.error(`🔥 Error deleting image from MinIO:`, error)
+          logger.error(`❌ Failed to delete image from MinIO: ${imageUrl}`, error)
         }
       }
-    } else {
-      logger.warn(`🎯 No images were deleted in this update`)
     }
 
     // Update cache with current images for next time
     productMediaCache.set(data.id, currentImages)
-    logger.warn(`🎯 Updated cache with ${currentImages.length} image(s)`)
-    logger.warn("🎯 ====================================================")
 
   } catch (error) {
-    logger.error(`🎯 Error processing product update:`, error)
+    logger.error(`Error processing product media deletion:`, error)
   }
 }
 

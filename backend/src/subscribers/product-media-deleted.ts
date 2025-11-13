@@ -1,10 +1,21 @@
 import { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
 import { IFileModuleService } from "@medusajs/framework/types"
 import { Modules, ContainerRegistrationKeys, remoteQueryObjectFromString } from "@medusajs/framework/utils"
+import { Client } from "minio"
 
 // In-memory cache to store product media before updates
 // Structure: { productId: [imageUrl1, imageUrl2, ...] }
 const productMediaCache = new Map<string, string[]>()
+
+// MinIO configuration from environment
+const MINIO_CONFIG = {
+  endPoint: process.env.MINIO_ENDPOINT || 'bucket.railway.internal',
+  port: 9000,
+  useSSL: false,
+  accessKey: process.env.MINIO_ACCESS_KEY || '',
+  secretKey: process.env.MINIO_SECRET_KEY || '',
+  bucket: 'medusa-media'
+}
 
 export default async function handleProductMediaDeleted({
   event: { data },
@@ -13,6 +24,15 @@ export default async function handleProductMediaDeleted({
   const logger = container.resolve("logger")
   const remoteQuery = container.resolve(ContainerRegistrationKeys.REMOTE_QUERY)
   const fileModuleService: IFileModuleService = container.resolve(Modules.FILE)
+  
+  // Initialize MinIO client
+  const minioClient = new Client({
+    endPoint: MINIO_CONFIG.endPoint,
+    port: MINIO_CONFIG.port,
+    useSSL: MINIO_CONFIG.useSSL,
+    accessKey: MINIO_CONFIG.accessKey,
+    secretKey: MINIO_CONFIG.secretKey
+  })
   
   logger.warn("🎯 ========== PRODUCT.UPDATED EVENT RECEIVED ==========")
   logger.warn(`🎯 Product ID: ${data.id}`)
@@ -61,13 +81,12 @@ export default async function handleProductMediaDeleted({
 
           logger.warn(`🔥 Deleting from MinIO: ${filename}`)
 
-          // Delete directly from MinIO using the file module service
-          // Pass the fileKey to the delete method
+          // Delete directly from MinIO using the MinIO client
           try {
-            await fileModuleService.delete({ fileKey: filename }, "minio")
+            await minioClient.removeObject(MINIO_CONFIG.bucket, filename)
             logger.warn(`✅ Successfully deleted from MinIO: ${filename}`)
           } catch (deleteError) {
-            logger.error(`🔥 Error during file deletion:`)
+            logger.error(`🔥 Error during MinIO deletion:`)
             logger.error(deleteError)
           }
 

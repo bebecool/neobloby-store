@@ -1,6 +1,6 @@
 import { SubscriberArgs, SubscriberConfig } from "@medusajs/framework"
 import { IFileModuleService } from "@medusajs/framework/types"
-import { Modules, ContainerRegistrationKeys, remoteQueryObjectFromString } from "@medusajs/framework/utils"
+import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
 
 // In-memory cache to store product media before updates
 // Structure: { productId: [imageUrl1, imageUrl2, ...] }
@@ -64,14 +64,11 @@ export default async function handleProductMediaDeleted({
           // Use the file module service to delete the file
           // The file module will use our custom MinIO provider
           try {
-            // Use remoteQuery to find the file by URL
-            const queryObject = remoteQueryObjectFromString({
-              entryPoint: "file",
-              fields: ["id", "url"],
-            })
+            // List ALL files with empty filter object and find by URL
+            const allFiles = await fileModuleService.listFiles({})
+            logger.warn(`🔥 Found ${allFiles.length} total files in database`)
             
-            const files = await remoteQuery(queryObject)
-            const fileRecord = files.find((f: any) => f.url === imageUrl)
+            const fileRecord = allFiles.find((f: any) => f.url === imageUrl)
             
             if (fileRecord?.id) {
               logger.warn(`🔥 Found file ID: ${fileRecord.id}, deleting...`)
@@ -79,7 +76,8 @@ export default async function handleProductMediaDeleted({
               logger.warn(`✅ Successfully deleted from MinIO and database: ${filename}`)
             } else {
               logger.warn(`🔥 File not found in database with URL: ${imageUrl}`)
-              logger.warn(`🔥 Total files in database: ${files.length}`)
+              logger.warn(`🔥 Available URLs (first 5):`)
+              allFiles.slice(0, 5).forEach((f: any) => logger.warn(`   - ${f.url}`))
             }
           } catch (deleteError) {
             logger.error(`🔥 Error during file deletion:`)

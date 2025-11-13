@@ -64,16 +64,22 @@ export default async function handleProductMediaDeleted({
           // Use the file module service to delete the file
           // The file module will use our custom MinIO provider
           try {
-            // List all files and find the one matching our URL
-            const files = await fileModuleService.listFiles({ url: imageUrl })
+            // Use remoteQuery to find the file by URL
+            const queryObject = remoteQueryObjectFromString({
+              entryPoint: "file",
+              fields: ["id", "url"],
+            })
             
-            if (files && files.length > 0) {
-              const fileId = files[0].id
-              logger.warn(`🔥 Found file ID: ${fileId}, deleting...`)
-              await fileModuleService.deleteFiles([fileId])
+            const files = await remoteQuery(queryObject)
+            const fileRecord = files.find((f: any) => f.url === imageUrl)
+            
+            if (fileRecord?.id) {
+              logger.warn(`🔥 Found file ID: ${fileRecord.id}, deleting...`)
+              await fileModuleService.deleteFiles([fileRecord.id])
               logger.warn(`✅ Successfully deleted from MinIO and database: ${filename}`)
             } else {
-              logger.warn(`🔥 File not found in database, cannot delete: ${imageUrl}`)
+              logger.warn(`🔥 File not found in database with URL: ${imageUrl}`)
+              logger.warn(`🔥 Total files in database: ${files.length}`)
             }
           } catch (deleteError) {
             logger.error(`🔥 Error during file deletion:`)

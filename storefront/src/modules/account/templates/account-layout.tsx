@@ -1,4 +1,7 @@
+"use client"
+
 import React from "react"
+import { useTranslation } from 'react-i18next'
 
 import UnderlineLink from "@modules/common/components/interactive-link"
 
@@ -21,20 +24,32 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
           <div>{customer && <AccountNav customer={customer} />}</div>
           <div className="flex-1">{children}</div>
         </div>
-        <div className="flex flex-col small:flex-row items-end justify-between small:border-t border-gray-200 py-12 gap-8">
-          <div>
-            <h3 className="text-xl-semi mb-4">Got questions?</h3>
-            <span className="txt-medium">
-              You can find frequently asked questions and answers on our
-              customer service page.
-            </span>
-          </div>
-          <div>
-            <UnderlineLink href="/customer-service">
-              Customer Service
-            </UnderlineLink>
-          </div>
-        </div>
+        <AccountFooter />
+      </div>
+    </div>
+  )
+}
+
+const AccountFooter = () => {
+  const { t, i18n } = useTranslation()
+  const [currentLang, setCurrentLang] = React.useState(i18n.language)
+
+  React.useEffect(() => {
+    setCurrentLang(i18n.language)
+  }, [i18n.language])
+  
+  return (
+    <div className="flex flex-col small:flex-row items-end justify-between small:border-t border-gray-200 py-12 gap-8">
+      <div>
+        <h3 className="text-xl-semi mb-4">{t('account.gotQuestions')}</h3>
+        <span className="txt-medium">
+          {t('account.gotQuestionsText')}
+        </span>
+      </div>
+      <div>
+        <UnderlineLink href="/customer-service">
+          {t('account.customerService')}
+        </UnderlineLink>
       </div>
     </div>
   )

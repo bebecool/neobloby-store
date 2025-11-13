@@ -1,7 +1,8 @@
 "use client"
 
 import { XMark } from "@medusajs/icons"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 import Help from "@modules/order/components/help"
 import Items from "@modules/order/components/items"
@@ -18,23 +19,41 @@ type OrderDetailsTemplateProps = {
 const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({
   order,
 }) => {
+  const { t, i18n } = useTranslation()
+  const [currentLang, setCurrentLang] = useState(i18n.language)
+
+  useEffect(() => {
+    setCurrentLang(i18n.language)
+  }, [i18n.language])
+
   return (
     <div className="flex flex-col justify-center gap-y-4">
       <div className="flex gap-2 justify-between items-center">
-        <h1 className="text-2xl-semi">Order details</h1>
+        <h1 className="text-2xl-semi">{t('order.orderDetails')}</h1>
         <LocalizedClientLink
           href="/account/orders"
           className="flex gap-2 items-center text-ui-fg-subtle hover:text-ui-fg-base"
           data-testid="back-to-overview-button"
         >
-          <XMark /> Back to overview
+          <XMark /> {t('order.backToOverview')}
         </LocalizedClientLink>
       </div>
       <div
         className="flex flex-col gap-4 h-full bg-white w-full"
         data-testid="order-details-container"
       >
-        <OrderDetails order={order} showStatus />
+        <OrderDetails 
+          order={order} 
+          showStatus 
+          locale=""
+          translations={{
+            thankYou: t('order.thankYou'),
+            placedSuccessfully: t('order.placedSuccessfully'),
+            confirmationSent: t('order.confirmationSent'),
+            orderDate: t('order.orderDate'),
+            orderNumber: t('order.orderNumber')
+          }}
+        />
         <Items items={order.items} />
         <ShippingDetails order={order} />
         <OrderSummary order={order} />

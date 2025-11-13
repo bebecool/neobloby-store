@@ -10,9 +10,9 @@ import { updateRegion } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 
 type CountryOption = {
-  country: string
+  country: string | undefined
   region: string
-  label: string
+  label: string | undefined
 }
 
 type CountrySelectProps = {
@@ -21,10 +21,7 @@ type CountrySelectProps = {
 
 const CountrySelect = ({ regions }: CountrySelectProps) => {
   const { t } = useTranslation()
-  const [current, setCurrent] = useState<
-    | { country: string | undefined; region: string; label: string | undefined }
-    | undefined
-  >(undefined)
+  const [current, setCurrent] = useState<CountryOption | null>(null)
 
   const params = useParams()
   const pathname = usePathname()
@@ -62,14 +59,24 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }, [regions])
 
   useEffect(() => {
-    if (countryCode) {
-      const option = options?.find((o) => o?.country === countryCode)
-      setCurrent(option)
+    if (options && options.length > 0) {
+      if (countryCode) {
+        const option = options.find((o) => o?.country === countryCode)
+        if (option) {
+          setCurrent(option)
+        }
+      }
+      // Si pas de current et qu'on a des options, prendre la première
+      if (!current && options[0]) {
+        setCurrent(options[0])
+      }
     }
-  }, [options, countryCode])
+  }, [options, countryCode, current])
 
   const handleChange = (option: CountryOption) => {
-    updateRegion(option.country, currentPath, locale)
+    if (option.country) {
+      updateRegion(option.country, currentPath, locale)
+    }
   }
 
   return (
@@ -77,7 +84,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
       <Listbox
         as="span"
         onChange={handleChange}
-        value={current || undefined}
+        value={current || options?.[0]}
       >
         {({ open }) => (
           <>

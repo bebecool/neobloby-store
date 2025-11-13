@@ -58,7 +58,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const collection = await getCollectionByHandle(params.handle)
+  const { handle } = await params
+  const collection = await getCollectionByHandle(handle)
 
   if (!collection) {
     notFound()
@@ -73,9 +74,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CollectionPage({ params, searchParams }: Props) {
+  const { handle, countryCode } = await params
   const { sortBy, page } = searchParams
 
-  const collection = await getCollectionByHandle(params.handle).then(
+  const collection = await getCollectionByHandle(handle).then(
     (collection: StoreCollection) => collection
   )
 
@@ -83,19 +85,12 @@ export default async function CollectionPage({ params, searchParams }: Props) {
     notFound()
   }
 
-  // Ajout du suspense boundary pour Next.js 16
-  // On importe Suspense de React
-  // ...existing code...
-  const React = await import("react")
-
   return (
-    <React.Suspense fallback={<div>Chargement...</div>}>
-      <CollectionTemplate
-        collection={collection}
-        page={page}
-        sortBy={sortBy}
-        countryCode={params.countryCode}
-      />
-    </React.Suspense>
+    <CollectionTemplate
+      collection={collection}
+      page={page}
+      sortBy={sortBy}
+      countryCode={countryCode}
+    />
   )
 }

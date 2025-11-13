@@ -49,9 +49,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = await params
   try {
     const { product_categories } = await getCategoryByHandle(
-      params.category
+      category
     )
 
     const title = product_categories
@@ -66,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} | Neobloby Store`,
       description,
       alternates: {
-        canonical: `${params.category.join("/")}`,
+        canonical: `${category.join("/")}`,
       },
     }
   } catch (error) {
@@ -75,10 +76,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
+  const { category, countryCode } = await params
   const { sortBy, page } = searchParams
 
   const { product_categories } = await getCategoryByHandle(
-    params.category
+    category
   )
 
   if (!product_categories) {
@@ -90,7 +92,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       categories={product_categories}
       sortBy={sortBy}
       page={page}
-      countryCode={params.countryCode}
+      countryCode={countryCode}
     />
   )
 }

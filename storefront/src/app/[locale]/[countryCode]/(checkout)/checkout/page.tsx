@@ -31,13 +31,14 @@ export default async function Checkout({
 }: {
   params: { countryCode: string }
 }) {
+  const { countryCode } = await params
   const cart = await fetchCart()
   const customer = await getCustomer()
 
   return (
     <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-40 py-12">
       <Wrapper cart={cart}>
-        <CheckoutForm cart={cart} customer={customer} countryCode={params.countryCode} />
+        <CheckoutForm cart={cart} customer={customer} countryCode={countryCode} />
       </Wrapper>
       <CheckoutSummary cart={cart} />
     </div>

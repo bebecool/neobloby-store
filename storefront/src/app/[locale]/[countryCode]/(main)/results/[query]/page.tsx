@@ -19,7 +19,7 @@ type Params = {
 }
 
 export default async function SearchResults({ params, searchParams }: Params) {
-  const { query } = params
+  const { query, countryCode } = await params
   const { sortBy, page } = searchParams
 
   const hits = await search(query).then((data) => data)
@@ -36,7 +36,7 @@ export default async function SearchResults({ params, searchParams }: Params) {
       ids={ids}
       sortBy={sortBy}
       page={page}
-      countryCode={params.countryCode}
+      countryCode={countryCode}
     />
   )
 }

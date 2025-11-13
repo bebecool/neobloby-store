@@ -32,12 +32,13 @@ export const metadata: Metadata = {
 }
 
 export default async function OrderConfirmedPage({ params }: Props) {
-  const order = await getOrder(params.id)
+  const { id, locale } = await params
+  const order = await getOrder(id)
   if (!order) {
     return notFound()
   }
 
   const isOnboarding = (await cookies()).get("_medusa_onboarding")?.value === "true"
 
-  return <OrderCompletedTemplate order={order} isOnboarding={isOnboarding} locale={params.locale} />
+  return <OrderCompletedTemplate order={order} isOnboarding={isOnboarding} locale={locale} />
 }

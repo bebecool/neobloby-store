@@ -18,7 +18,7 @@ export default async function Addresses({
 }: {
   params: { locale: string; countryCode: string }
 }) {
-  const { countryCode } = params
+  const { countryCode } = await params
   const customer = await getCustomer()
   const region = await getRegion(countryCode)
 

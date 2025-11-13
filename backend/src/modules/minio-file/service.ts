@@ -279,6 +279,11 @@ class MinioFileProviderService extends AbstractFileProviderService {
   async delete(
     fileData: ProviderDeleteFileDTO
   ): Promise<void> {
+    this.logger_.info(`=== DELETE DEBUG ===`)
+    this.logger_.info(`fileData object: ${JSON.stringify(fileData, null, 2)}`)
+    this.logger_.info(`fileKey: ${fileData?.fileKey}`)
+    this.logger_.info(`==================`)
+
     if (!fileData?.fileKey) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
@@ -287,11 +292,13 @@ class MinioFileProviderService extends AbstractFileProviderService {
     }
 
     try {
+      this.logger_.info(`Attempting to delete file ${fileData.fileKey} from bucket ${this.bucket}`)
       await this.client.removeObject(this.bucket, fileData.fileKey)
       this.logger_.info(`Successfully deleted file ${fileData.fileKey} from MinIO bucket ${this.bucket}`)
     } catch (error) {
       // Log error but don't throw if file doesn't exist
-      this.logger_.warn(`Failed to delete file ${fileData.fileKey}: ${error.message}`)
+      this.logger_.error(`Failed to delete file ${fileData.fileKey}: ${error.message}`)
+      this.logger_.error(`Error details: ${JSON.stringify(error)}`)
     }
   }
 

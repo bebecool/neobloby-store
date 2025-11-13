@@ -37,7 +37,7 @@ export default async function OrderConfirmedPage({ params }: Props) {
     return notFound()
   }
 
-  const isOnboarding = cookies().get("_medusa_onboarding")?.value === "true"
+  const isOnboarding = (await cookies()).get("_medusa_onboarding")?.value === "true"
 
   return <OrderCompletedTemplate order={order} isOnboarding={isOnboarding} locale={params.locale} />
 }

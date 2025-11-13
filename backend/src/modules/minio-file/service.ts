@@ -164,6 +164,33 @@ class MinioFileProviderService extends AbstractFileProviderService {
         this.logger_.info(`Object keys: ${Object.keys(file.content).slice(0, 10).join(', ')}`)
         this.logger_.info(`Content length/size: ${(file.content as any).length || (file.content as any).size || 'unknown'}`)
       }
+      
+      // Log first bytes if it's a string to detect format
+      if (typeof file.content === 'string') {
+        this.logger_.info(`String length: ${file.content.length}`)
+        
+        // Check first bytes as hex to identify file format
+        const first20Bytes = file.content.substring(0, 20).split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ')
+        this.logger_.info(`First 20 bytes (hex): ${first20Bytes}`)
+        
+        // Detect file signature
+        const hexStr = file.content.substring(0, 4).split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+        this.logger_.info(`File signature: ${hexStr}`)
+        
+        // JPG starts with FF D8 FF
+        // PNG starts with 89 50 4E 47
+        const isJPG = hexStr.startsWith('ffd8ff')
+        const isPNG = hexStr.startsWith('89504e47')
+        this.logger_.info(`Detected format - JPG: ${isJPG}, PNG: ${isPNG}`)
+        
+        // Check if contains non-printable chars (binary data)
+        const hasBinaryChars = file.content.substring(0, 100).split('').some(c => {
+          const code = c.charCodeAt(0)
+          return code < 32 && code !== 9 && code !== 10 && code !== 13
+        })
+        this.logger_.info(`Contains binary characters: ${hasBinaryChars}`)
+      }
+      
       this.logger_.info(`===================`)
       
       // Gérer différents types de contenu
@@ -183,11 +210,14 @@ class MinioFileProviderService extends AbstractFileProviderService {
         content = Buffer.concat(chunks)
         this.logger_.debug(`Converted stream to Buffer (${content.length} bytes)`)
       } else if (typeof file.content === 'string') {
-        // Si c'est une string, essayer de détecter l'encodage
-        // Medusa v2 envoie probablement du binary (latin1) ou base64
-        // On essaie binary d'abord (latin1) car c'est le plus courant
+        // Medusa v2 sends file content as binary-encoded string
+        // We MUST use 'binary' (latin1) encoding to preserve byte values 0-255
         content = Buffer.from(file.content, 'binary')
-        this.logger_.info(`Converted string to Buffer using 'binary' encoding (${content.length} bytes)`)
+        this.logger_.info(`Converted binary string to Buffer (${content.length} bytes)`)
+        
+        // Verify conversion by checking file signature
+        const signature = content.slice(0, 4).toString('hex')
+        this.logger_.info(`Buffer signature after conversion: ${signature}`)
       } else if (fileContent instanceof ArrayBuffer) {
         // Si c'est un ArrayBuffer
         content = Buffer.from(new Uint8Array(fileContent))

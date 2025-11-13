@@ -20,7 +20,7 @@ type Params = {
 
 export default async function StorePage({ searchParams, params }: Params) {
   const { countryCode } = await params
-  const { sortBy, page } = searchParams
+  const { sortBy, page } = await searchParams
 
   return (
     <StoreTemplate

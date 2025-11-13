@@ -61,17 +61,28 @@ export default async function handleProductMediaDeleted({
 
           logger.warn(`🔥 Deleting from MinIO: ${filename}`)
 
-          // Get MinIO service directly
-          const minioService = (fileModuleService as any).__container__.resolve("minio-file")
-          
-          if (!minioService || typeof minioService.delete !== 'function') {
-            logger.error(`🔥 MinIO service not found or delete method not available`)
-            continue
-          }
+          // Use the file module service to delete the file
+          // The file module will use our custom MinIO provider
+          try {
+            // Find the file ID from the database using the URL
+            const queryObject = remoteQueryObjectFromString({
+              entryPoint: "file",
+              variables: { url: imageUrl },
+              fields: ["id"],
+            })
 
-          // Call MinIO delete method
-          await minioService.delete({ fileKey: filename })
-          logger.warn(`✅ Successfully deleted from MinIO: ${filename}`)
+            const [fileRecord] = await remoteQuery(queryObject)
+            
+            if (fileRecord?.id) {
+              logger.warn(`🔥 Found file ID: ${fileRecord.id}, deleting...`)
+              await fileModuleService.deleteFiles([fileRecord.id])
+              logger.warn(`✅ Successfully deleted from MinIO and database: ${filename}`)
+            } else {
+              logger.warn(`🔥 File not found in database, cannot delete: ${imageUrl}`)
+            }
+          } catch (deleteError) {
+            logger.error(`🔥 Error during file deletion:`, deleteError)
+          }
 
         } catch (error) {
           logger.error(`🔥 Error deleting image from MinIO:`, error)

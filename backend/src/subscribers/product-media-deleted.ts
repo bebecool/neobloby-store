@@ -61,24 +61,11 @@ export default async function handleProductMediaDeleted({
 
           logger.warn(`🔥 Deleting from MinIO: ${filename}`)
 
-          // Use the file module service to delete the file
-          // The file module will use our custom MinIO provider
+          // Delete directly from MinIO using the file module service
+          // Pass the fileKey to the delete method
           try {
-            // List ALL files with empty filter object and find by URL
-            const allFiles = await fileModuleService.listFiles({})
-            logger.warn(`🔥 Found ${allFiles.length} total files in database`)
-            
-            const fileRecord = allFiles.find((f: any) => f.url === imageUrl)
-            
-            if (fileRecord?.id) {
-              logger.warn(`🔥 Found file ID: ${fileRecord.id}, deleting...`)
-              await fileModuleService.deleteFiles([fileRecord.id])
-              logger.warn(`✅ Successfully deleted from MinIO and database: ${filename}`)
-            } else {
-              logger.warn(`🔥 File not found in database with URL: ${imageUrl}`)
-              logger.warn(`🔥 Available URLs (first 5):`)
-              allFiles.slice(0, 5).forEach((f: any) => logger.warn(`   - ${f.url}`))
-            }
+            await fileModuleService.delete({ fileKey: filename }, "minio")
+            logger.warn(`✅ Successfully deleted from MinIO: ${filename}`)
           } catch (deleteError) {
             logger.error(`🔥 Error during file deletion:`)
             logger.error(deleteError)

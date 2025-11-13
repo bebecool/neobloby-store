@@ -183,9 +183,11 @@ class MinioFileProviderService extends AbstractFileProviderService {
         content = Buffer.concat(chunks)
         this.logger_.debug(`Converted stream to Buffer (${content.length} bytes)`)
       } else if (typeof file.content === 'string') {
-        // Si c'est une string, l'utiliser directement comme Buffer
-        content = Buffer.from(file.content, 'utf-8')
-        this.logger_.debug(`Converted string to Buffer (${content.length} bytes)`)
+        // Si c'est une string, essayer de détecter l'encodage
+        // Medusa v2 envoie probablement du binary (latin1) ou base64
+        // On essaie binary d'abord (latin1) car c'est le plus courant
+        content = Buffer.from(file.content, 'binary')
+        this.logger_.info(`Converted string to Buffer using 'binary' encoding (${content.length} bytes)`)
       } else if (fileContent instanceof ArrayBuffer) {
         // Si c'est un ArrayBuffer
         content = Buffer.from(new Uint8Array(fileContent))

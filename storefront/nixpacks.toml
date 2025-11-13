@@ -1,2 +1,9 @@
 [phases.setup]
 nixPkgs = ["nodejs_20", "pnpm-9_x"]
+
+[start]
+cmd = "npm run start"
+
+[variables]
+PORT = "8080"
+NODE_ENV = "production"

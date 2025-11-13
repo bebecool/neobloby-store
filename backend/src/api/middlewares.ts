@@ -1,15 +1,19 @@
-import type { MiddlewaresConfig } from "@medusajs/medusa"
+import type {
+  MedusaRequest,
+  MedusaResponse,
+  MedusaNextFunction,
+} from "@medusajs/framework/http"
+import type { MiddlewaresConfig } from "@medusajs/framework/http"
 
-export const config: MiddlewaresConfig = {
+export default {
   routes: [
     {
       matcher: "/admin/*",
       middlewares: [
-        (req, res, next) => {
-          // Récupérer le logger depuis le scope
+        (req: MedusaRequest, res: MedusaResponse, next: MedusaNextFunction) => {
           const logger = req.scope.resolve("logger")
           
-          // Log ALL DELETE requests to admin endpoints
+          // Log ALL DELETE requests
           if (req.method === "DELETE") {
             logger.warn("=================================================")
             logger.warn("🔴 DELETE REQUEST INTERCEPTED")
@@ -28,4 +32,4 @@ export const config: MiddlewaresConfig = {
       ],
     },
   ],
-}
+} satisfies MiddlewaresConfig

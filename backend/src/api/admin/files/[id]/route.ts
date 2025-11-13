@@ -16,7 +16,7 @@ export const GET = async (
   res: MedusaResponse<HttpTypes.AdminFileResponse>
 ) => {
   const logger = req.scope.resolve("logger")
-  logger.info(`[Custom Route] GET /admin/uploads/${req.params.id} called`)
+  logger.info(`[Custom Route] GET /admin/files/${req.params.id} called`)
   
   const remoteQuery = req.scope.resolve(ContainerRegistrationKeys.REMOTE_QUERY)
   const variables = { id: req.params.id }

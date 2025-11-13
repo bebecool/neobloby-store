@@ -2,7 +2,7 @@ import {
   AuthenticatedMedusaRequest,
   MedusaResponse,
 } from "@medusajs/framework/http"
-import { deleteFilesWorkflow } from "@medusajs/core-flows"
+import { deleteFilesWorkflow } from "@medusajs/medusa/core-flows"
 import { HttpTypes } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,

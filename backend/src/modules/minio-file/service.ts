@@ -210,14 +210,19 @@ class MinioFileProviderService extends AbstractFileProviderService {
         content = Buffer.concat(chunks)
         this.logger_.debug(`Converted stream to Buffer (${content.length} bytes)`)
       } else if (typeof file.content === 'string') {
-        // Medusa v2 sends file content as binary-encoded string
-        // We MUST use 'binary' (latin1) encoding to preserve byte values 0-255
-        content = Buffer.from(file.content, 'binary')
-        this.logger_.info(`Converted binary string to Buffer (${content.length} bytes)`)
+        // Medusa v2 sends file content as BASE64-encoded string
+        // The signature /9j/ confirms base64 encoding (JPEG base64 starts with /9j/)
+        content = Buffer.from(file.content, 'base64')
+        this.logger_.info(`Converted base64 string to Buffer (${content.length} bytes)`)
         
         // Verify conversion by checking file signature
         const signature = content.slice(0, 4).toString('hex')
         this.logger_.info(`Buffer signature after conversion: ${signature}`)
+        
+        // JPG should be FF D8 FF Ex, PNG should be 89 50 4E 47
+        const isValidJPG = signature.startsWith('ffd8ff')
+        const isValidPNG = signature.startsWith('89504e47')
+        this.logger_.info(`Valid format - JPG: ${isValidJPG}, PNG: ${isValidPNG}`)
       } else if (fileContent instanceof ArrayBuffer) {
         // Si c'est un ArrayBuffer
         content = Buffer.from(new Uint8Array(fileContent))

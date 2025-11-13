@@ -10,51 +10,90 @@ const DEFAULT_LOCALE = "fr" // Langue par défaut
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
   regionMapUpdated: Date.now(),
+  lastFetchFailed: false,
+  lastFailureTime: 0,
 }
 
 async function getRegionMap() {
-  const { regionMap, regionMapUpdated } = regionMapCache
+  const { regionMap, regionMapUpdated, lastFetchFailed, lastFailureTime } = regionMapCache
+
+  // Si le dernier fetch a échoué il y a moins de 5 minutes, ne pas réessayer
+  if (lastFetchFailed && Date.now() - lastFailureTime < 5 * 60 * 1000) {
+    if (regionMap.size === 0) {
+      // Créer une région par défaut si la map est vide
+      regionMapCache.regionMap.set(DEFAULT_REGION, {
+        id: DEFAULT_REGION,
+        name: DEFAULT_REGION.toUpperCase(),
+        currency_code: "eur",
+      } as HttpTypes.StoreRegion)
+    }
+    return regionMapCache.regionMap
+  }
 
   if (
     !regionMap.keys().next().value ||
     regionMapUpdated < Date.now() - 3600 * 1000
   ) {
-    // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
-    const response = await fetch(`${BACKEND_URL}/store/regions`, {
-      headers: {
-        "x-publishable-api-key": PUBLISHABLE_API_KEY!,
-      },
-      next: {
-        revalidate: 3600,
-        tags: ["regions"],
-      },
-    })
-
-    // Check if the response is OK before parsing JSON
-    if (!response.ok) {
-      console.error(
-        `Failed to fetch regions: ${response.status} ${response.statusText}`
-      )
-      // Return a fallback region map to prevent middleware from crashing
-      regionMapCache.regionMap.set(DEFAULT_REGION, { id: DEFAULT_REGION } as HttpTypes.StoreRegion)
-      regionMapCache.regionMapUpdated = Date.now()
-      return regionMapCache.regionMap
-    }
-
-    const { regions } = await response.json()
-
-    if (!regions?.length) {
-      notFound()
-    }
-
-    // Create a map of country codes to regions.
-    regions.forEach((region: HttpTypes.StoreRegion) => {
-      region.countries?.forEach((c) => {
-        regionMapCache.regionMap.set(c.iso_2 ?? "", region)
+    try {
+      // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
+      const response = await fetch(`${BACKEND_URL}/store/regions`, {
+        headers: {
+          "x-publishable-api-key": PUBLISHABLE_API_KEY!,
+        },
+        next: {
+          revalidate: 3600,
+          tags: ["regions"],
+        },
       })
-    })
 
-    regionMapCache.regionMapUpdated = Date.now()
+      // Check if the response is OK before parsing JSON
+      if (!response.ok) {
+        console.error(
+          `Failed to fetch regions: ${response.status} ${response.statusText}`
+        )
+        // Marquer le fetch comme échoué
+        regionMapCache.lastFetchFailed = true
+        regionMapCache.lastFailureTime = Date.now()
+        
+        // Return a fallback region map to prevent middleware from crashing
+        regionMapCache.regionMap.set(DEFAULT_REGION, {
+          id: DEFAULT_REGION,
+          name: DEFAULT_REGION.toUpperCase(),
+          currency_code: "eur",
+        } as HttpTypes.StoreRegion)
+        regionMapCache.regionMapUpdated = Date.now()
+        return regionMapCache.regionMap
+      }
+
+      const { regions } = await response.json()
+
+      if (!regions?.length) {
+        notFound()
+      }
+
+      // Create a map of country codes to regions.
+      regions.forEach((region: HttpTypes.StoreRegion) => {
+        region.countries?.forEach((c) => {
+          regionMapCache.regionMap.set(c.iso_2 ?? "", region)
+        })
+      })
+
+      regionMapCache.regionMapUpdated = Date.now()
+      regionMapCache.lastFetchFailed = false // Reset failure flag on success
+    } catch (error) {
+      console.error("Error fetching regions:", error)
+      regionMapCache.lastFetchFailed = true
+      regionMapCache.lastFailureTime = Date.now()
+      
+      // Créer une région par défaut en cas d'erreur
+      if (regionMapCache.regionMap.size === 0) {
+        regionMapCache.regionMap.set(DEFAULT_REGION, {
+          id: DEFAULT_REGION,
+          name: DEFAULT_REGION.toUpperCase(),
+          currency_code: "eur",
+        } as HttpTypes.StoreRegion)
+      }
+    }
   }
 
   return regionMapCache.regionMap

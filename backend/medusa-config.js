@@ -28,7 +28,7 @@ import {
   SOLANA_RPC_URL,
   SOLANA_SESSION_EXPIRATION,
   COINGECKO_API_KEY
-} from './src/lib/constants.ts';
+} from './src/lib/constants.js';
 
 loadEnv(process.env.NODE_ENV, process.cwd());
 

@@ -15,7 +15,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
   const locale = (params?.locale as string) || 'fr'
   
   const translatedTitle = getTranslatedField(product, 'title', locale)
-  const translatedDescription = getTranslatedField(product, 'description', locale)
+  const translatedDescription = getTranslatedField(product, 'description', locale)?.replace(/\\n/g, '\n')
   const translatedCollectionTitle = product.collection 
     ? getTranslatedCollectionField(product.collection, 'title', locale)
     : null

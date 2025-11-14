@@ -6,6 +6,7 @@ import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 import UserManualLink from "@modules/layout/components/user-manual-link"
+import AboutLink from "@modules/layout/components/about-link"
 
 export default async function Footer() {
   const { collections } = await getCollectionsList(0, 6)
@@ -121,7 +122,9 @@ export default async function Footer() {
                 <li>
                   <UserManualLink />
                 </li>
-
+                <li>
+                  <AboutLink />
+                </li>
               </ul>
             </div>
           </div>

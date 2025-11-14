@@ -1,11 +1,11 @@
 import "server-only"
 import { cookies } from "next/headers"
 
-export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> => {
+export const getAuthHeaders = async (): Promise<{ headers: { authorization: string } } | {}> => {
   const token = (await cookies()).get("_medusa_jwt")?.value
 
   if (token) {
-    return { authorization: `Bearer ${token}` }
+    return { headers: { authorization: `Bearer ${token}` } }
   }
 
   return {}

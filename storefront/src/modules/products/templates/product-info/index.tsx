@@ -14,17 +14,11 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
   const params = useParams()
   const locale = (params?.locale as string) || 'fr'
   
-  console.log('ProductInfo - Locale:', locale)
-  console.log('ProductInfo - Product metadata:', product.metadata)
-  
   const translatedTitle = getTranslatedField(product, 'title', locale)
   const translatedDescription = getTranslatedField(product, 'description', locale)
   const translatedCollectionTitle = product.collection 
     ? getTranslatedCollectionField(product.collection, 'title', locale)
     : null
-
-  console.log('ProductInfo - Translated title:', translatedTitle)
-  console.log('ProductInfo - Original title:', product.title)
 
   return (
     <div id="product-info">

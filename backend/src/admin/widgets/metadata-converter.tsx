@@ -94,6 +94,7 @@ const MetadataConverterWidget = () => {
             borderRadius: "0.375rem",
             fontFamily: "ui-sans-serif, system-ui, sans-serif",
             fontSize: "0.8125rem",
+            color: "#111827",
             resize: "vertical",
             lineHeight: "1.5",
             outline: "none",
@@ -130,9 +131,9 @@ const MetadataConverterWidget = () => {
             backgroundColor: "#fafafa",
             fontFamily: "ui-monospace, monospace",
             fontSize: "0.75rem",
+            color: "#111827",
             resize: "vertical",
-            lineHeight: "1.5",
-            color: "#52525b"
+            lineHeight: "1.5"
           }
         }),
         React.createElement(

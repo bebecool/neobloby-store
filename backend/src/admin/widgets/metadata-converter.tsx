@@ -1,4 +1,5 @@
 import * as React from "react"
+import { defineWidgetConfig } from "@medusajs/admin-shared"
 
 const MetadataConverterWidget = () => {
   const [inputText, setInputText] = React.useState("")
@@ -135,10 +136,9 @@ const MetadataConverterWidget = () => {
   )
 }
 
-export default MetadataConverterWidget
-
-MetadataConverterWidget.config = {
+// Configuration du widget
+export const config = defineWidgetConfig({
   zone: "product.details.after",
-}
+})
 
-export const config = MetadataConverterWidget.config
+export default MetadataConverterWidget

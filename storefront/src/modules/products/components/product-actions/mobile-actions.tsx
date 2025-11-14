@@ -1,7 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { Button, clx } from "@medusajs/ui"
-import React, { Fragment, useMemo } from "react"
+import React, { Fragment, useMemo, useState, useEffect } from "react"
 import { useTranslation } from 'react-i18next'
+import { useParams } from "next/navigation"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
 import ChevronDown from "@modules/common/icons/chevron-down"
@@ -35,7 +36,17 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   optionsDisabled,
 }) => {
   const { state, open, close } = useToggleState()
-  const { t } = useTranslation()
+  const [mounted, setMounted] = useState(false)
+  const { t, i18n } = useTranslation()
+  const params = useParams()
+  const locale = (params?.locale as string) || 'fr'
+
+  useEffect(() => {
+    setMounted(true)
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale)
+    }
+  }, [locale, i18n])
 
   const price = getProductPrice({
     product: product,
@@ -120,7 +131,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >
-                {!variant
+                {!mounted ? '' : !variant
                   ? t('product.selectVariant')
                   : !inStock
                   ? t('product.outOfStock')

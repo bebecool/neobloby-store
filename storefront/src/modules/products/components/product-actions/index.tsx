@@ -37,8 +37,18 @@ export default function ProductActions({
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const countryCode = useParams().countryCode as string
-  const { t } = useTranslation()
+  const params = useParams()
+  const { t, i18n } = useTranslation()
+  const locale = (params?.locale as string) || 'fr'
+
+  useEffect(() => {
+    setMounted(true)
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale)
+    }
+  }, [locale, i18n])
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -145,7 +155,7 @@ export default function ProductActions({
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant
+          {!mounted ? '' : !selectedVariant
             ? t('product.selectVariant')
             : !inStock
             ? t('product.outOfStock')

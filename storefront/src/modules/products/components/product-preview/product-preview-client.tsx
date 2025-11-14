@@ -1,11 +1,12 @@
 "use client"
 
 import { Button } from "@medusajs/ui"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { useTranslation } from "react-i18next"
 
 import { addToCart } from "@lib/data/cart"
+import { getTranslatedField } from "@lib/util/product-translation"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
@@ -26,8 +27,19 @@ export default function ProductPreviewClient({
   isFeatured,
 }: ProductPreviewClientProps) {
   const [isAdding, setIsAdding] = useState(false)
-  const { t } = useTranslation()
+  const [mounted, setMounted] = useState(false)
+  const { t, i18n } = useTranslation()
   const params = useParams()
+  const locale = (params?.locale as string) || 'fr'
+  
+  useEffect(() => {
+    setMounted(true)
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale)
+    }
+  }, [locale, i18n])
+  
+  const translatedTitle = getTranslatedField(product, 'title', locale)
   
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -68,7 +80,7 @@ export default function ProductPreviewClient({
       <div className="p-4 space-y-3">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-lg text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-300" data-testid="product-title">
-            {product.title}
+            {translatedTitle}
           </h3>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -88,7 +100,7 @@ export default function ProductPreviewClient({
             className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-sm"
             isLoading={isAdding}
           >
-            {isAdding ? 'Ajout...' : t('product.addToCart')}
+            {!mounted ? '..' : t('product.addToCart')}
           </Button>
         </div>
       </div>

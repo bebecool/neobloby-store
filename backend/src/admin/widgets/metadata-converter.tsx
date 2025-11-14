@@ -135,8 +135,8 @@ const MetadataConverterWidget = () => {
   )
 }
 
+export default MetadataConverterWidget
+
 export const config = {
   zone: "product.details.before",
 }
-
-export default MetadataConverterWidget

@@ -137,6 +137,8 @@ const MetadataConverterWidget = () => {
 
 export default MetadataConverterWidget
 
-export const config = {
+MetadataConverterWidget.config = {
   zone: "product.details.after",
 }
+
+export const config = MetadataConverterWidget.config

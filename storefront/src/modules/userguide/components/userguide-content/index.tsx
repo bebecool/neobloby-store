@@ -14,25 +14,29 @@ export default function UserGuideContent() {
     setTimeout(() => setCopied(false), 2000)
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-white via-purple-50/30 to-blue-50/30 py-2">
       <div className="container max-w-4xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-4 mb-4">
+        <div className="text-center mb-2">
+          <div className="flex flex-col items-center justify-center gap-2 mb-2 relative overflow-visible">
+            <div className="absolute -top-4 left-0 w-16 h-16 rounded-full bg-yellow-300 opacity-60 blur-md"></div>
+            <div className="absolute top-8 right-0 w-12 h-12 rounded-full bg-purple-300 opacity-50 blur-md"></div>
+            <div className="absolute bottom-0 left-12 w-10 h-10 rounded-full bg-pink-300 opacity-40 blur-md"></div>
+            <div className="absolute bottom-2 right-16 w-8 h-8 rounded-full bg-blue-300 opacity-40 blur-md"></div>
             <Image
-              src="/images/mascotte.png"
-              alt="NeoBloby Mascotte"
-              width={80}
-              height={80}
-              className="w-20 h-20"
+              src="/images/Bloby_Manuel.png"
+              alt="Bloby_Manuel"
+              width={220}
+              height={220}
+              className="w-52 h-52 md:w-56 md:h-56 lg:w-64 lg:h-64 drop-shadow-xl mb-0"
             />
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-primary bg-clip-text text-transparent mt-0 mb-1 px-4 py-2 leading-tight">
               {t('userguide.title')}
             </h1>
+            <p className="text-lg text-gray-600 mt-0 mb-0 px-4">
+              {t('userguide.subtitle')}
+            </p>
           </div>
-          <p className="text-lg text-gray-600">
-            {t('userguide.subtitle')}
-          </p>
         </div>
 
         {/* Guide Card */}

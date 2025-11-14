@@ -3,16 +3,21 @@ import * as React from "react"
 
 const MetadataConverterWidget = () => {
   const [inputText, setInputText] = React.useState("")
-  const [convertedText, setConvertedText] = React.useState("")
   const [copied, setCopied] = React.useState(false)
 
-  const handleConvert = () => {
-    const converted = inputText.replace(/\r?\n/g, '\\n')
-    setConvertedText(converted)
+  // Conversion automatique
+  const convertedText = React.useMemo(() => {
+    return inputText.replace(/\r?\n/g, '\\n')
+  }, [inputText])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputText(e.target.value)
     setCopied(false)
   }
 
-  const handleCopy = async () => {
+  const handleCopyClick = async () => {
+    if (!convertedText) return
+    
     await navigator.clipboard.writeText(convertedText)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -22,12 +27,12 @@ const MetadataConverterWidget = () => {
     "div",
     { 
       style: { 
-        backgroundColor: "#f9fafb", 
+        backgroundColor: "white", 
         padding: "1.5rem", 
         borderRadius: "0.5rem", 
-        border: "1px solid #e5e7eb",
+        border: "1px solid #e4e4e7",
         marginBottom: "1.5rem",
-        marginTop: "1rem"
+        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)"
       }
     },
     React.createElement(
@@ -35,13 +40,27 @@ const MetadataConverterWidget = () => {
       { style: { marginBottom: "1rem" } },
       React.createElement(
         "h3",
-        { style: { fontSize: "1rem", fontWeight: "600", marginBottom: "0.25rem" } },
-        "🔄 Convertisseur de Métadonnées"
+        { 
+          style: { 
+            fontSize: "0.875rem", 
+            fontWeight: "600", 
+            marginBottom: "0.25rem",
+            color: "#18181b",
+            letterSpacing: "-0.01em"
+          } 
+        },
+        "Convertisseur de Métadonnées"
       ),
       React.createElement(
         "p",
-        { style: { color: "#6b7280", fontSize: "0.875rem" } },
-        "Collez votre texte avec des retours à la ligne, puis convertissez pour les métadonnées"
+        { 
+          style: { 
+            color: "#71717a", 
+            fontSize: "0.8125rem",
+            lineHeight: "1.4"
+          } 
+        },
+        "Collez votre texte multi-lignes, la conversion est automatique. Cliquez pour copier."
       )
     ),
     React.createElement(
@@ -52,84 +71,93 @@ const MetadataConverterWidget = () => {
         null,
         React.createElement(
           "label",
-          { style: { display: "block", marginBottom: "0.375rem", fontWeight: "500", fontSize: "0.875rem" } },
+          { 
+            style: { 
+              display: "block", 
+              marginBottom: "0.5rem", 
+              fontWeight: "500", 
+              fontSize: "0.8125rem",
+              color: "#3f3f46"
+            } 
+          },
           "Texte original"
         ),
         React.createElement("textarea", {
           value: inputText,
-          onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setInputText(e.target.value),
-          placeholder: "Le kit comprend :\nArticle 1\nArticle 2",
-          rows: 4,
+          onChange: handleInputChange,
+          placeholder: "Collez votre texte avec des retours à la ligne...\n\nExemple :\nLe kit comprend :\n• Article 1\n• Article 2\n• Article 3",
+          rows: 5,
           style: {
             width: "100%",
-            padding: "0.5rem",
-            border: "1px solid #d1d5db",
+            padding: "0.75rem",
+            border: "1px solid #e4e4e7",
             borderRadius: "0.375rem",
-            fontFamily: "inherit",
-            fontSize: "0.875rem",
-            resize: "vertical"
+            fontFamily: "ui-sans-serif, system-ui, sans-serif",
+            fontSize: "0.8125rem",
+            resize: "vertical",
+            lineHeight: "1.5",
+            outline: "none",
+            transition: "border-color 0.15s",
+            backgroundColor: "#fafafa"
           }
         })
       ),
-      React.createElement(
-        "button",
-        {
-          onClick: handleConvert,
-          disabled: !inputText,
-          style: {
-            padding: "0.5rem 1rem",
-            backgroundColor: inputText ? "#6366f1" : "#e5e7eb",
-            color: inputText ? "white" : "#9ca3af",
-            border: "none",
-            borderRadius: "0.375rem",
-            fontWeight: "500",
-            cursor: inputText ? "pointer" : "not-allowed",
-            fontSize: "0.875rem"
-          }
-        },
-        "Convertir"
-      ),
-      convertedText && React.createElement(
+      inputText && React.createElement(
         "div",
         null,
         React.createElement(
           "label",
-          { style: { display: "block", marginBottom: "0.375rem", fontWeight: "500", fontSize: "0.875rem" } },
-          "Texte converti (à copier dans Value)"
+          { 
+            style: { 
+              display: "block", 
+              marginBottom: "0.5rem", 
+              fontWeight: "500", 
+              fontSize: "0.8125rem",
+              color: "#3f3f46"
+            } 
+          },
+          "Texte converti (prêt pour Value)"
         ),
         React.createElement("textarea", {
           value: convertedText,
           readOnly: true,
-          rows: 4,
+          rows: 3,
           style: {
             width: "100%",
-            padding: "0.5rem",
-            border: "1px solid #d1d5db",
+            padding: "0.75rem",
+            border: "1px solid #e4e4e7",
             borderRadius: "0.375rem",
-            backgroundColor: "#f3f4f6",
-            fontFamily: "monospace",
+            backgroundColor: "#fafafa",
+            fontFamily: "ui-monospace, monospace",
             fontSize: "0.75rem",
-            resize: "vertical"
+            resize: "vertical",
+            lineHeight: "1.5",
+            color: "#52525b"
           }
         }),
         React.createElement(
           "button",
           {
-            onClick: handleCopy,
+            onClick: handleCopyClick,
             style: {
               width: "100%",
-              padding: "0.5rem 1rem",
-              backgroundColor: copied ? "#10b981" : "#059669",
+              padding: "0.625rem 1rem",
+              backgroundColor: copied ? "#16a34a" : "#18181b",
               color: "white",
               border: "none",
               borderRadius: "0.375rem",
               fontWeight: "500",
               cursor: "pointer",
-              marginTop: "0.5rem",
-              fontSize: "0.875rem"
+              marginTop: "0.75rem",
+              fontSize: "0.8125rem",
+              transition: "background-color 0.2s",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.5rem"
             }
           },
-          copied ? "✓ Copié !" : "📋 Copier"
+          copied ? "✓ Copié dans le presse-papier !" : "📋 Copier le texte converti"
         )
       )
     )

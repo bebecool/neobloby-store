@@ -27,12 +27,12 @@ const MetadataConverterWidget = () => {
     "div",
     { 
       style: { 
-        backgroundColor: "white", 
+        backgroundColor: "#1a1a1a", 
         padding: "1.5rem", 
         borderRadius: "0.5rem", 
-        border: "1px solid #e4e4e7",
+        border: "1px solid #2a2a2a",
         marginBottom: "1.5rem",
-        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)"
+        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.3)"
       }
     },
     React.createElement(
@@ -45,7 +45,7 @@ const MetadataConverterWidget = () => {
             fontSize: "0.875rem", 
             fontWeight: "600", 
             marginBottom: "0.25rem",
-            color: "#18181b",
+            color: "#f4f4f5",
             letterSpacing: "-0.01em"
           } 
         },
@@ -55,7 +55,7 @@ const MetadataConverterWidget = () => {
         "p",
         { 
           style: { 
-            color: "#71717a", 
+            color: "#a1a1aa", 
             fontSize: "0.8125rem",
             lineHeight: "1.4"
           } 
@@ -77,7 +77,7 @@ const MetadataConverterWidget = () => {
               marginBottom: "0.5rem", 
               fontWeight: "500", 
               fontSize: "0.8125rem",
-              color: "#3f3f46"
+              color: "#d4d4d8"
             } 
           },
           "Texte original"
@@ -90,16 +90,16 @@ const MetadataConverterWidget = () => {
           style: {
             width: "100%",
             padding: "0.75rem",
-            border: "1px solid #e4e4e7",
+            border: "1px solid #3a3a3a",
             borderRadius: "0.375rem",
             fontFamily: "ui-sans-serif, system-ui, sans-serif",
             fontSize: "0.8125rem",
-            color: "#111827",
+            color: "#f4f4f5",
             resize: "vertical",
             lineHeight: "1.5",
             outline: "none",
             transition: "border-color 0.15s",
-            backgroundColor: "#fafafa"
+            backgroundColor: "#262626"
           }
         })
       ),
@@ -114,7 +114,7 @@ const MetadataConverterWidget = () => {
               marginBottom: "0.5rem", 
               fontWeight: "500", 
               fontSize: "0.8125rem",
-              color: "#3f3f46"
+              color: "#d4d4d8"
             } 
           },
           "Texte converti (prêt pour Value)"
@@ -126,12 +126,12 @@ const MetadataConverterWidget = () => {
           style: {
             width: "100%",
             padding: "0.75rem",
-            border: "1px solid #e4e4e7",
+            border: "1px solid #3a3a3a",
             borderRadius: "0.375rem",
-            backgroundColor: "#fafafa",
+            backgroundColor: "#262626",
             fontFamily: "ui-monospace, monospace",
             fontSize: "0.75rem",
-            color: "#111827",
+            color: "#f4f4f5",
             resize: "vertical",
             lineHeight: "1.5"
           }
@@ -143,7 +143,7 @@ const MetadataConverterWidget = () => {
             style: {
               width: "100%",
               padding: "0.625rem 1rem",
-              backgroundColor: copied ? "#16a34a" : "#18181b",
+              backgroundColor: copied ? "#16a34a" : "#3b3b3b",
               color: "white",
               border: "none",
               borderRadius: "0.375rem",

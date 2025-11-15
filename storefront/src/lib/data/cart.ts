@@ -37,7 +37,7 @@ export async function getOrSetCart(countryCode: string) {
     const cartResp = await sdk.store.cart.create({ region_id: region.id })
     cart = cartResp.cart
     await setCartId(cart.id)
-    revalidateTag("cart")
+    revalidateTag("cart", "max")
   }
 
   if (cart && cart?.region_id !== region.id) {
@@ -47,7 +47,7 @@ export async function getOrSetCart(countryCode: string) {
       {},
       await getAuthHeaders()
     )
-    revalidateTag("cart")
+    revalidateTag("cart", "max")
   }
 
   return cart
@@ -62,7 +62,7 @@ export async function updateCart(data: HttpTypes.StoreUpdateCart) {
   return sdk.store.cart
     .update(cartId, data, {}, await getAuthHeaders())
     .then(({ cart }) => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
       return cart
     })
     .catch(medusaError)
@@ -97,7 +97,7 @@ export async function addToCart({
       await getAuthHeaders()
     )
     .then(() => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
     })
     .catch(medusaError)
 }
@@ -121,7 +121,7 @@ export async function updateLineItem({
   await sdk.store.cart
     .updateLineItem(cartId, lineId, { quantity }, {}, await getAuthHeaders())
     .then(() => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
     })
     .catch(medusaError)
 }
@@ -139,10 +139,10 @@ export async function deleteLineItem(lineId: string) {
   await sdk.store.cart
     .deleteLineItem(cartId, lineId, {}, await getAuthHeaders())
     .then(() => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
     })
     .catch(medusaError)
-  revalidateTag("cart")
+  revalidateTag("cart", "max")
 }
 
 export async function enrichLineItems(
@@ -207,7 +207,7 @@ export async function setShippingMethod({
       await getAuthHeaders()
     )
     .then(() => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
     })
     .catch(medusaError)
 }
@@ -222,7 +222,7 @@ export async function initiatePaymentSession(
   return sdk.store.payment
     .initiatePaymentSession(cart, data, {}, await getAuthHeaders())
     .then((resp) => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
       return resp
     })
     .catch(medusaError)
@@ -236,7 +236,7 @@ export async function applyPromotions(codes: string[]) {
 
   await updateCart({ promo_codes: codes })
     .then(() => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
     })
     .catch(medusaError)
 }
@@ -360,7 +360,7 @@ export async function placeOrder() {
   const cartRes = await sdk.store.cart
     .complete(cartId, {}, await getAuthHeaders())
     .then((cartRes) => {
-      revalidateTag("cart")
+      revalidateTag("cart", "max")
       return cartRes
     })
     .catch(medusaError)
@@ -392,11 +392,11 @@ export async function updateRegion(countryCode: string, currentPath: string, loc
 
   if (cartId) {
     await updateCart({ region_id: region.id })
-    revalidateTag("cart")
+    revalidateTag("cart", "max")
   }
 
-  revalidateTag("regions")
-  revalidateTag("products")
+  revalidateTag("regions", "max")
+  revalidateTag("products", "max")
 
   // Inclure le locale dans l'URL : /{locale}/{countryCode}/...
   const localePrefix = locale || 'fr'

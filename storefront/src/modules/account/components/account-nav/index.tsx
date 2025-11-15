@@ -12,7 +12,7 @@ import MapPin from "@modules/common/icons/map-pin"
 import Package from "@modules/common/icons/package"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
-import { signout } from "@lib/data/customer"
+import { signoutAction } from "@lib/data/customer-actions"
 
 const AccountNav = ({
   customer,
@@ -29,7 +29,7 @@ const AccountNav = ({
   }, [i18n.language])
 
   const handleLogout = async () => {
-    await signout(countryCode)
+    await signoutAction(countryCode)
   }
 
   return (

@@ -1,26 +1,30 @@
-import { useActionState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useActionState, useEffect, useRef } from "react"
 
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import Input from "@modules/common/components/input"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
-import { loginAction } from "@lib/data/customer-actions"
+import { login } from "@lib/data/customer"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
 const Login = ({ setCurrentView }: Props) => {
-  const [message, formAction] = useActionState(loginAction, null)
-  const router = useRouter()
+  const [message, formAction] = useActionState(login, undefined)
+  const renderCount = useRef(0)
 
   useEffect(() => {
-    if (!message) {
-      // Succès de connexion (pas d'erreur retournée)
-      router.refresh()
+    renderCount.current += 1
+    
+    // Si c'est au moins le 2ème render (après soumission) et pas d'erreur
+    if (renderCount.current >= 2 && !message) {
+      // Attendre 200ms pour que le cookie soit bien sauvegardé
+      setTimeout(() => {
+        window.location.href = window.location.pathname
+      }, 200)
     }
-  }, [message, router])
+  }, [message])
 
   return (
     <div
@@ -51,7 +55,7 @@ const Login = ({ setCurrentView }: Props) => {
             data-testid="password-input"
           />
         </div>
-        <ErrorMessage error={message?.error} data-testid="login-error-message" />
+        <ErrorMessage error={message} data-testid="login-error-message" />
         <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
           Sign in
         </SubmitButton>

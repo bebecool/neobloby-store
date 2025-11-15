@@ -72,8 +72,8 @@ export async function login(_currentState: unknown, formData: FormData) {
     await sdk.auth
       .login("customer", "emailpass", { email, password })
       .then(async (token) => {
-        await setAuthToken(typeof token === 'string' ? token : (token as any).location)
-        revalidateTag("customer", "max")
+        await setAuthToken(typeof token === 'string' ? token : token.location)
+        revalidateTag("customer")
       })
   } catch (error: any) {
     return error.toString()

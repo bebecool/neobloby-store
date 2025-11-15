@@ -14,7 +14,7 @@ import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { HttpTypes } from "@medusajs/types"
 import { addCustomerAddress } from "@lib/data/customer"
 
-const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
+const AddAddress = ({ region, countryCode }: { region: HttpTypes.StoreRegion; countryCode: string }) => {
   const [successState, setSuccessState] = useState(false)
   const { state, open, close: closeModal } = useToggleState(false)
   const { t } = useTranslation()
@@ -123,6 +123,7 @@ const AddAddress = ({ region }: { region: HttpTypes.StoreRegion }) => {
                 required
                 autoComplete="country"
                 data-testid="country-select"
+                defaultValue={countryCode}
               />
               <Input
                 label={t('address.phone')}

@@ -29,11 +29,16 @@ const CountrySelect = forwardRef<
     }))
   }, [region])
 
+  // Use the first country of the region as default if no defaultValue is provided
+  const effectiveDefaultValue = useMemo(() => {
+    return defaultValue || countryOptions?.[0]?.value
+  }, [defaultValue, countryOptions])
+
   return (
     <NativeSelect
       ref={innerRef}
       placeholder={placeholder}
-      defaultValue={defaultValue}
+      defaultValue={effectiveDefaultValue}
       {...props}
     >
       {countryOptions?.map(({ value, label }, index) => (

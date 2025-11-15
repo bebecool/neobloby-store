@@ -7,13 +7,14 @@ import { HttpTypes } from "@medusajs/types"
 type AddressBookProps = {
   customer: HttpTypes.StoreCustomer
   region: HttpTypes.StoreRegion
+  countryCode: string
 }
 
-const AddressBook: React.FC<AddressBookProps> = ({ customer, region }) => {
+const AddressBook: React.FC<AddressBookProps> = ({ customer, region, countryCode }) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 mt-4">
-        <AddAddress region={region} />
+        <AddAddress region={region} countryCode={countryCode} />
         {customer.addresses.map((address) => {
           return (
             <EditAddress region={region} address={address} key={address.id} />

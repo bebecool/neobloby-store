@@ -29,7 +29,7 @@ export default async function Addresses({
   return (
     <div className="w-full" data-testid="addresses-page-wrapper">
       <AddressesHeader />
-      <AddressBook customer={customer} region={region} />
+      <AddressBook customer={customer} region={region} countryCode={countryCode} />
     </div>
   )
 }

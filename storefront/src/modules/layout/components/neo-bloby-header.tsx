@@ -36,9 +36,9 @@ export default function NeoBlobyHeader({ regions }: NeoBlobyHeaderProps) {
           <Image
             src="/images/neobloby-logo-gradient.png"
             alt="Logo Neobloby"
-            width={220}
-            height={70}
-            className="h-14 w-auto object-contain"
+            width={270}
+            height={90}
+            className="h-[90px] w-auto object-contain"
             priority
           />
         </div>

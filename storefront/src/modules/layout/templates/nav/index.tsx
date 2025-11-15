@@ -37,18 +37,18 @@ export default async function Nav() {
               <Image
                 src="/images/mascotte.png"
                 alt="Mascotte Neobloby"
-                width={60}
-                height={60}
-                className="bg-transparent w-[50px] h-[50px] md:w-[60px] md:h-[60px] flex-shrink-0"
-                style={{ width: '50px', height: '50px' }}
+                width={120}
+                height={120}
+                className="bg-transparent w-[56px] h-[56px] md:w-[120px] md:h-[120px] flex-shrink-0"
+                style={{ width: '56px', height: '56px' }}
                 unoptimized
               />
               <Image
                 src="/images/neobloby-logo-gradient.png"
                 alt="Logo Neobloby"
-                width={180}
-                height={50}
-                className="h-7 md:h-12 w-auto object-contain flex-shrink-1 min-w-0"
+                width={270}
+                height={90}
+                className="h-[54px] md:h-[90px] w-auto object-contain flex-shrink-1 min-w-0"
                 unoptimized
               />
             </LocalizedClientLink>

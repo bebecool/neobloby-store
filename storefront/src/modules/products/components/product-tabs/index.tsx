@@ -87,7 +87,15 @@ const ShippingInfoTab = () => {
   const { t } = useTranslation()
   
   return (
-    <div className="text-small-regular py-8">
+    <div className="text-small-regular py-2">
+      <div className="flex justify-center mb-2">
+        <img
+          src="/images/Blobyfusee.png"
+          alt="Bloby fusée"
+          style={{ width: 140, height: 140, objectFit: 'contain' }}
+          className="drop-shadow-lg"
+        />
+      </div>
       <div className="grid grid-cols-1 gap-y-8">
         <div className="flex items-start gap-x-2">
           <FastDelivery />

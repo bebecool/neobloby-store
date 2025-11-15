@@ -37,6 +37,11 @@ const OrderCard = ({ order }: OrderCardProps) => {
             month: 'long',
             day: 'numeric'
           })}
+          {" "}
+          {new Date(order.created_at).toLocaleTimeString(i18n.language, {
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
         </span>
         <span className="px-2" data-testid="order-amount">
           {convertToLocale({

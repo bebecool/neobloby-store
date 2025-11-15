@@ -14,7 +14,7 @@ type OrderDetailsProps = {
   }
 }
 
-const OrderDetails = ({ order, showStatus, translations }: OrderDetailsProps) => {
+const OrderDetails = ({ order, showStatus, translations, locale }: OrderDetailsProps) => {
   const formatStatus = (str: string) => {
     const formatted = str.split("_").join(" ")
 
@@ -43,7 +43,16 @@ const OrderDetails = ({ order, showStatus, translations }: OrderDetailsProps) =>
       <Text className="mt-2">
         {translations.orderDate}{" "}
         <span data-testid="order-date">
-          {new Date(order.created_at).toDateString()}
+          {new Date(order.created_at).toLocaleDateString(locale, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+            {" "}
+          {new Date(order.created_at).toLocaleTimeString(locale, {
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
         </span>
       </Text>
       <Text className="mt-2 text-ui-fg-interactive">

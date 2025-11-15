@@ -45,7 +45,7 @@ const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({
         <OrderDetails 
           order={order} 
           showStatus 
-          locale=""
+          locale={currentLang}
           translations={{
             thankYou: t('order.thankYou'),
             placedSuccessfully: t('order.placedSuccessfully'),

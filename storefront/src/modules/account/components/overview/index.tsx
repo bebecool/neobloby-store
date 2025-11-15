@@ -121,6 +121,11 @@ const Overview = ({ customer, orders }: OverviewProps) => {
                                   month: 'long',
                                   day: 'numeric'
                                 })}
+                                {" "}
+                                {new Date(order.created_at).toLocaleTimeString(currentLang, {
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
                               </span>
                               <span
                                 data-testid="order-id"

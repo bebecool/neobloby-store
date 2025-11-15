@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 import Input from "@modules/common/components/input"
 
@@ -14,6 +15,7 @@ type MyInformationProps = {
 
 const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
   const [successState, setSuccessState] = React.useState(false)
+  const { t } = useTranslation()
 
   // TODO: Add support for password updates
   const [state, formAction] = useActionState((() => {}) as any, {
@@ -33,9 +35,9 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
   return (
     <form action={formAction} onReset={() => clearState()} className="w-full">
       <AccountInfo
-        label="Password"
+        label={t('account.password')}
         currentInfo={
-          <span>The password is not shown for security reasons</span>
+          <span>{t('account.passwordHidden')}</span>
         }
         isSuccess={successState}
         isError={!!state.error}
@@ -45,21 +47,21 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
       >
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Old password"
+            label={t('account.oldPassword')}
             name="old_password"
             required
             type="password"
             data-testid="old-password-input"
           />
           <Input
-            label="New password"
+            label={t('account.newPassword')}
             type="password"
             name="new_password"
             required
             data-testid="new-password-input"
           />
           <Input
-            label="Confirm password"
+            label={t('account.confirmPassword')}
             type="password"
             name="confirm_password"
             required

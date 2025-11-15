@@ -1,6 +1,7 @@
 import { Disclosure } from "@headlessui/react"
 import { Badge, Button, clx } from "@medusajs/ui"
 import { useEffect } from "react"
+import { useTranslation } from "react-i18next"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
 import { useFormStatus } from "react-dom"
@@ -27,6 +28,7 @@ const AccountInfo = ({
   'data-testid': dataTestid
 }: AccountInfoProps) => {
   const { state, close, toggle } = useToggleState()
+  const { t } = useTranslation()
 
   const { pending } = useFormStatus()
 
@@ -63,7 +65,7 @@ const AccountInfo = ({
             data-testid="edit-button"
             data-active={state}
           >
-            {state ? "Cancel" : "Edit"}
+            {state ? t('account.cancel') : t('account.edit')}
           </Button>
         </div>
       </div>
@@ -82,7 +84,7 @@ const AccountInfo = ({
           data-testid="success-message"
         >
           <Badge className="p-2 my-4" color="green">
-            <span>{label} updated succesfully</span>
+            <span>{label} {t('account.updateSuccess')}</span>
           </Badge>
         </Disclosure.Panel>
       </Disclosure>
@@ -126,7 +128,7 @@ const AccountInfo = ({
                 type="submit"
                 data-testid="save-button"
               >
-                Save changes
+                {t('account.save')}
               </Button>
             </div>
           </div>
